@@ -12,8 +12,9 @@
     - [ ] Static logic library
     - [ ] \(Static math library\)
     - [ ] \(Static physics library\)
-  - [ ] Setup CI \(CircleCI\)
-  - [ ] Structure project
+    - [ ] Add header file dependency checking
+  - [x] Setup CI \(CircleCI\)
+  - [x] Structure project
   - [ ] Add a logger
   - [ ] Add stacktraces
 

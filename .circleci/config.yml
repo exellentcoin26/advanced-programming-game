@@ -3,7 +3,7 @@ version: 2.1
 parameters:
   sfml_dependencies:
     type: string
-    default: "libfreetype-dev libx11-dev libxrandr-dev libudev-dev mesa-common-dev libopengl-dev libflac-dev libogg-dev libvorbis-dev libopenal-dev"
+    default: "libfreetype-dev libx11-dev libxrandr-dev libudev-dev mesa-common-dev libopengl-dev libflac-dev libogg-dev libvorbis-dev libopenal-dev libxcursor-dev"
 
 jobs:
   build_game:
@@ -16,6 +16,8 @@ jobs:
       - run:
           name: Install dependencies
           command: apt-get install -q -y clang make cmake git <<pipeline.parameters.sfml_dependencies>>
+      - run: git submodule sync
+      - run: git submodule update --init --recursive
       - run:
           command: make build
           name: Build the project

@@ -48,7 +48,9 @@ LDFLAGS += -lsfml-graphics-s
 # 	    Make Targets
 # =========================
 
-build: libs $(BUILDDIR)/$(BIN)
+.PHONY: lib run clean clean-all
+
+build: lib $(BUILDDIR)/$(BIN)
 
 $(BUILDDIR)/%.o: %.$(CPP_SRC_EXTENSION)
 	mkdir -p $(dir $@)
@@ -57,19 +59,15 @@ $(BUILDDIR)/%.o: %.$(CPP_SRC_EXTENSION)
 $(BUILDDIR)/$(BIN): $(OBJS)
 	$(CXX) $(OBJS) $(INCFLAGS) $(LDFLAGS) -o $@
 
-.PHONY:
-libs:
+lib:
 	cd $(LIBDIR)/sfml && cmake -DBUILD_SHARED_LIBS=false > /dev/null . && make -s $(SFML_TARGETS)
 
-.PHONY:
 run: build
 	$(BUILDDIR)/$(BIN)
 
-.PHONY:
 clean:
 	$(RM) $(BUILDDIR)
 
-.PHONY:
 clean-all: clean
 	# reset submodules to last commit
 	git submodule foreach --recursive git clean -xfd
