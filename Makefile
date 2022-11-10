@@ -32,10 +32,16 @@ OBJS := $(patsubst %.$(CPP_SRC_EXTENSION),$(BUILDDIR)/%.o,$(SRCS))
 INCFLAGS += $(addprefix -I,$(shell find $(SRCDIR) -type d))
 
 # =========================
-# 	   Library Linking and Building
+#      Library Config
 # =========================
 
+NUM_COMP_THREADS ?= 12
+
 SFML_TARGETS := sfml-system sfml-window sfml-graphics
+
+# =========================
+#      Library Linking
+# =========================
 
 INCFLAGS += -I$(LIBDIR)/sfml/include/SFML
 
@@ -48,7 +54,9 @@ LDFLAGS += -lsfml-graphics-s
 # 	    Make Targets
 # =========================
 
-.PHONY: lib run clean clean-all
+.PHONY: all lib run clean clean-all
+
+all: build
 
 build: lib $(BUILDDIR)/$(BIN)
 
@@ -60,7 +68,7 @@ $(BUILDDIR)/$(BIN): $(OBJS)
 	$(CXX) $(OBJS) $(INCFLAGS) $(LDFLAGS) -o $@
 
 lib:
-	cd $(LIBDIR)/sfml && cmake -DBUILD_SHARED_LIBS=false > /dev/null . && make -s $(SFML_TARGETS)
+	cd $(LIBDIR)/sfml && cmake -DBUILD_SHARED_LIBS=false > /dev/null . && make -s -j$(NUM_COMP_THREADS) $(SFML_TARGETS)
 
 run: build
 	$(BUILDDIR)/$(BIN)
