@@ -4,3 +4,5 @@
 -Wall
 -Wextra
 -Wnopedantic
+
+-Ilib/sfml/include
