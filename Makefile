@@ -22,10 +22,10 @@ RM := rm -rf
 # 	   Compile Flags
 # =========================
 
-CPPFLAGS ?= -std=c++17 -Wall -Wextra -Wpedantic
+CPPFLAGS ?= -std=c++17 -Wall -Wextra -pedantic
 CPPFLAGS_DEBUG := -g -Og
 
-CPPFLAGS += $(CPPFLAGS_DEBUG)
+# CPPFLAGS += $(CPPFLAGS_DEBUG)
 
 SRCS := $(shell find $(SRCDIR) -name "*.$(CPP_SRC_EXTENSION)")
 OBJS := $(patsubst %.$(CPP_SRC_EXTENSION),$(BUILDDIR)/%.o,$(SRCS))
@@ -52,7 +52,7 @@ LDFLAGS += -lsfml-graphics-s
 LDFLAGS += -lsfml-window-s
 LDFLAGS += -lsfml-system-s
 # static dependencies of SFML
-LDFLAGS += -lGLU -lGL -lX11 -ludev -lpthread -lXrandr
+LDFLAGS += -lGL -lX11 -ludev -lpthread -lXrandr
 
 # =========================
 # 	    Make Targets
@@ -72,7 +72,7 @@ $(BUILDDIR)/$(BIN): lib $(OBJS)
 	$(CXX) $(OBJS) $(INCFLAGS) $(LDFLAGS) -o $@
 
 lib:
-	cd $(LIBDIR)/sfml && cmake -DBUILD_SHARED_LIBS=false . > /dev/null . && make -s -j$(NUM_COMP_THREADS) $(SFML_TARGETS)
+	cd $(LIBDIR)/sfml && cmake -Wno-dev -DBUILD_SHARED_LIBS=false . > /dev/null . && make -s -j$(NUM_COMP_THREADS) $(SFML_TARGETS)
 
 run: build
 	./seg_wrapper.sh $(BUILDDIR)/$(BIN)
