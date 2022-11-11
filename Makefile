@@ -22,7 +22,7 @@ RM := rm -rf
 # 	   Compile Flags
 # =========================
 
-CPPFLAGS ?= -std=c++11 -Wall -Wextra -Wpedantic
+CPPFLAGS ?= -std=c++17 -Wall -Wextra -Wpedantic
 CPPFLAGS_DEBUG := -g -Og
 
 SRCS := $(shell find $(SRCDIR) -name "*.$(CPP_SRC_EXTENSION)")
@@ -58,13 +58,13 @@ LDFLAGS += -lsfml-graphics-s
 
 all: build
 
-build: lib $(BUILDDIR)/$(BIN)
+build: $(BUILDDIR)/$(BIN)
 
 $(BUILDDIR)/%.o: %.$(CPP_SRC_EXTENSION)
 	mkdir -p $(dir $@)
 	$(CXX) $(CPPFLAGS) $(INCFLAGS) -c $< -o $@
 
-$(BUILDDIR)/$(BIN): $(OBJS)
+$(BUILDDIR)/$(BIN): lib $(OBJS)
 	$(CXX) $(OBJS) $(INCFLAGS) $(LDFLAGS) -o $@
 
 lib:
