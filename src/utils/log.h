@@ -64,4 +64,6 @@ private:
 
 }; // namespace utils
 
+#define log(level) *utils::Logger::get_instance()->log(__FILE__, __LINE__, __func__, utils::Logger::LogLevel::level)
+
 #endif // GAME_SRC_UTILS_LOG_H
