@@ -15,8 +15,8 @@
     - [ ] Add header file dependency checking
   - [x] Setup CI \(CircleCI\)
   - [x] Structure project
-  - [ ] Add a logger
-  - [ ] Add stacktraces
+  - [x] Add a logger
+  - [x] Add stacktraces
 
 - [x] Setup git
 

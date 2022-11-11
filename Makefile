@@ -25,6 +25,8 @@ RM := rm -rf
 CPPFLAGS ?= -std=c++17 -Wall -Wextra -Wpedantic
 CPPFLAGS_DEBUG := -g -Og
 
+CPPFLAGS += $(CPPFLAGS_DEBUG)
+
 SRCS := $(shell find $(SRCDIR) -name "*.$(CPP_SRC_EXTENSION)")
 OBJS := $(patsubst %.$(CPP_SRC_EXTENSION),$(BUILDDIR)/%.o,$(SRCS))
 
@@ -71,7 +73,7 @@ lib:
 	cd $(LIBDIR)/sfml && cmake -DBUILD_SHARED_LIBS=false > /dev/null . && make -s -j$(NUM_COMP_THREADS) $(SFML_TARGETS)
 
 run: build
-	$(BUILDDIR)/$(BIN)
+	./seg_wrapper.sh $(BUILDDIR)/$(BIN)
 
 clean:
 	$(RM) $(BUILDDIR)
