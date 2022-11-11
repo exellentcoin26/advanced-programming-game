@@ -45,12 +45,14 @@ SFML_TARGETS := sfml-system sfml-window sfml-graphics
 #      Library Linking
 # =========================
 
-INCFLAGS += -I$(LIBDIR)/sfml/include/SFML
+INCFLAGS += -I$(LIBDIR)/sfml/include
 
 LDFLAGS += -L$(LIBDIR)/sfml/lib
-LDFLAGS += -lsfml-system-s
-LDFLAGS += -lsfml-window-s
 LDFLAGS += -lsfml-graphics-s
+LDFLAGS += -lsfml-window-s
+LDFLAGS += -lsfml-system-s
+# static dependencies of SFML
+LDFLAGS += -lGLU -lGL -lX11 -ludev -lpthread -lXrandr
 
 # =========================
 # 	    Make Targets
@@ -70,7 +72,7 @@ $(BUILDDIR)/$(BIN): lib $(OBJS)
 	$(CXX) $(OBJS) $(INCFLAGS) $(LDFLAGS) -o $@
 
 lib:
-	cd $(LIBDIR)/sfml && cmake -DBUILD_SHARED_LIBS=false > /dev/null . && make -s -j$(NUM_COMP_THREADS) $(SFML_TARGETS)
+	cd $(LIBDIR)/sfml && cmake -DBUILD_SHARED_LIBS=false . > /dev/null . && make -s -j$(NUM_COMP_THREADS) $(SFML_TARGETS)
 
 run: build
 	./seg_wrapper.sh $(BUILDDIR)/$(BIN)
