@@ -22,7 +22,7 @@ RM := rm -rf
 # 	   Compile Flags
 # =========================
 
-CPPFLAGS ?= -std=c++17 -Wall -Wextra -pedantic
+CPPFLAGS ?= -std=c++17 -Wall -Wextra -Wpedantic
 CPPFLAGS_DEBUG := -g -Og
 
 # CPPFLAGS += $(CPPFLAGS_DEBUG)
@@ -36,8 +36,6 @@ INCFLAGS += $(addprefix -I,$(shell find $(SRCDIR) -type d))
 # =========================
 #      Library Config
 # =========================
-
-NUM_COMP_THREADS ?= 12
 
 SFML_TARGETS := sfml-system sfml-window sfml-graphics
 
@@ -72,7 +70,7 @@ $(BUILDDIR)/$(BIN): lib $(OBJS)
 	$(CXX) $(OBJS) $(INCFLAGS) $(LDFLAGS) -o $@
 
 lib:
-	cd $(LIBDIR)/sfml && cmake -Wno-dev -DBUILD_SHARED_LIBS=false . > /dev/null . && make -s -j$(NUM_COMP_THREADS) $(SFML_TARGETS)
+	cd $(LIBDIR)/sfml && cmake -Wno-dev -DBUILD_SHARED_LIBS=false . > /dev/null . && $(MAKE) -s $(SFML_TARGETS)
 
 run: build
 	./seg_wrapper.sh $(BUILDDIR)/$(BIN)
