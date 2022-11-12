@@ -48,6 +48,6 @@ private:
     f64 delta_time{};
 };
 
-}; // namespace utils
+} // namespace utils
 
 #endif // GAME_SRC_UTILS_STOPWATCH_H

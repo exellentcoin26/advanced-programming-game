@@ -62,7 +62,7 @@ private:
     static const char* log_level_strings[];
 };
 
-}; // namespace utils
+} // namespace utils
 
 #define log(level) *utils::Logger::get_instance()->log(__FILE__, __LINE__, __func__, utils::Logger::LogLevel::level)
 
