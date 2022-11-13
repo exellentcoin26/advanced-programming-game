@@ -9,6 +9,8 @@
   - [ ] Setup make
     - [x] Base config
     - [ ] Build targets
+      - [x] Base
+      - [ ] Expanded
     - [ ] Static logic library
     - [ ] \(Static math library\)
     - [ ] \(Static physics library\)
