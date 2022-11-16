@@ -9,8 +9,10 @@ CPP_HEADER_EXTENSION := h
 
 BUILDDIR := ./build
 SRCDIR := ./src
+TESTDIR := ./test
 LIBDIR := ./lib
 BIN := game
+TEST := game_test
 
 MAIN := $(SRCDIR)/main.$(CPP_SRC_EXTENSION)
 
@@ -30,6 +32,12 @@ CPPFLAGS += $(CPPFLAGS_DEBUG)
 SRCS := $(shell find $(SRCDIR) -name "*.$(CPP_SRC_EXTENSION)")
 OBJS := $(patsubst %.$(CPP_SRC_EXTENSION),$(BUILDDIR)/%.o,$(SRCS))
 
+TEST_SRCS := $(shell find $(TESTDIR) -name "*.$(CPP_SRC_EXTENSION)")
+
+# list testable source files here
+
+TEST_OBJS := $(patsubst %.$(CPP_SRC_EXTENSION),$(BUILDDIR)/%.o,$(TEST_SRCS))
+
 # include all header files
 INCFLAGS += $(addprefix -I,$(shell find $(SRCDIR) -type d))
 
@@ -45,6 +53,8 @@ SFML_TARGETS := sfml-system sfml-window sfml-graphics
 
 INCFLAGS += -I$(LIBDIR)/sfml/include
 
+TEST_INCFALGS += -I$(LIBDIR)/doctest/include
+
 LDFLAGS += -L$(LIBDIR)/sfml/lib
 LDFLAGS += -lsfml-graphics-s
 LDFLAGS += -lsfml-window-s
@@ -56,11 +66,15 @@ LDFLAGS += -lGL -lX11 -ludev -lpthread -lXrandr
 # 	    Make Targets
 # =========================
 
-.PHONY: all lib run clean clean-all
+.PHONY: all lib run clean clean-all build-test
 
 all: build
 
 build: $(BUILDDIR)/$(BIN)
+
+build-test: CPPFLAGS += -DTEST
+build-test: INCFLAGS += $(TEST_INCFALGS)
+build-test: $(BUILDDIR)/$(TEST)
 
 $(BUILDDIR)/%.o: %.$(CPP_SRC_EXTENSION)
 	mkdir -p $(dir $@)
@@ -69,11 +83,17 @@ $(BUILDDIR)/%.o: %.$(CPP_SRC_EXTENSION)
 $(BUILDDIR)/$(BIN): lib $(OBJS)
 	$(CXX) $(OBJS) $(INCFLAGS) $(LDFLAGS) -o $@
 
+$(BUILDDIR)/$(TEST): $(TEST_OBJS)
+	$(CXX) $(TEST_OBJS) $(INCFLAGS) -o $@
+
 lib:
 	cd $(LIBDIR)/sfml && cmake -Wno-dev -DBUILD_SHARED_LIBS=false . > /dev/null . && $(MAKE) -s $(SFML_TARGETS)
 
 run: build
 	./seg_wrapper.sh $(BUILDDIR)/$(BIN)
+
+test: build-test
+	$(BUILDDIR)/$(TEST)
 
 clean:
 	$(RM) $(BUILDDIR)

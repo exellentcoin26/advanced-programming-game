@@ -21,6 +21,9 @@ jobs:
       - run:
           command: make build
           name: Build the project
+      - run:
+          command: make test
+          name: Test parts of the project
 
 workflows:
   build_game:

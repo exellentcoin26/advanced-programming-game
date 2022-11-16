@@ -3,6 +3,9 @@
 
 -Wall
 -Wextra
--Wnopedantic
+-Wpedantic
 
 -Ilib/sfml/include
+-Ilib/doctest/include
+
+-DTEST
