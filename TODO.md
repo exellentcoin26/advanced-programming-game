@@ -1,6 +1,6 @@
 # TODO
 
-- [ ] Decide what cpp version I will be using
+- [x] Decide what cpp version I will be using
 
 - [ ] Setup cpp config
 
@@ -14,7 +14,7 @@
     - [ ] Static logic library
     - [ ] \(Static math library\)
     - [ ] \(Static physics library\)
-    - [ ] Add header file dependency checking
+    - [x] Add header file dependency checking
   - [x] Setup CI \(CircleCI\)
   - [x] Structure project
   - [x] Add a logger
@@ -24,7 +24,7 @@
 
   - [x] Add .gitignore
 
-- [ ] Decide on how tests will be done
+- [x] Decide on how tests will be done
 
 - [ ] Come up with a name for the game
 
@@ -32,19 +32,19 @@
 
   - [ ] Physics
   - [ ] Math library
-  - [ ] Entity design
-    - [ ] Decide how to handle collision
-    - [ ] Player
-      - [ ] Movement controller
-  - [ ] Stopwatch
-  - [ ] World
+  - [x] Entity design
+    - [x] Decide how to handle collision
+    - [x] Player
+      - [x] Movement controller
+  - [x] Stopwatch
+  - [x] World
   - [ ] Camera (Only positions, not rendering)
 
 - [ ] View
-  - [ ] Implement Game class (main program)
-  - [ ] Implement state
+  - [x] Implement Game class (main program)
+  - [x] Implement state
     - [ ] MenuState
     - [ ] \(OptionsState\)
-    - [ ] LevelManagerState
+    - [x] GameState
       - [ ] LevelSelector
-      - [ ] Level
+      - [x] Level
