@@ -17,7 +17,7 @@ void utils::Keyboard::update() {
         const bool new_state = sf::Keyboard::isKeyPressed(static_cast<Key>(i));
 
         if (new_state == this->key_down.test(i))
-            return;
+            continue;
 
         if (new_state) {
             this->key_down.set(i);
