@@ -78,7 +78,7 @@ build-test: $(BUILDDIR)/$(TEST)
 
 $(BUILDDIR)/%.o: %.$(CPP_SRC_EXTENSION)
 	mkdir -p $(dir $@)
-	$(CXX) $(CPPFLAGS) $(INCFLAGS) -c $< -o $@
+	$(CXX) $(CPPFLAGS) $(INCFLAGS) -MMD -c $< -o $@
 
 $(BUILDDIR)/$(BIN): lib $(OBJS)
 	$(CXX) $(OBJS) $(INCFLAGS) $(LDFLAGS) -o $@
@@ -101,6 +101,8 @@ clean:
 clean-all: clean
 	# reset submodules to last commit
 	git submodule foreach --recursive git clean -xfd
+
+-include $(shell find $(BUILDDIR) -name "*.d")
 
 # command for debugging variables
 print-%  : ; @echo $* = $($*)
