@@ -3,9 +3,12 @@
 #ifndef GAME_SRC_STATE_GAMESTATE_H
 #define GAME_SRC_STATE_GAMESTATE_H
 
+#include "SFML/Graphics.hpp"
+
 #include "state.h"
 #include "statemanager.h"
 
+#include "../factory.h"
 #include "../world.h"
 
 #include <unordered_map>
@@ -14,7 +17,7 @@ namespace state {
 
 class LevelSelectorState : public State {
 public:
-    LevelSelectorState() = default;
+    LevelSelectorState(Window* window);
     ~LevelSelectorState() = default;
 
     void update(Keyboard* keyboard) override;
@@ -22,13 +25,13 @@ public:
 
 class LevelState : public State {
 public:
-    LevelState();
+    LevelState(Window* window);
     ~LevelState() = default;
 
     void update(Keyboard* keyboard) override;
 
 private:
-    World world{};
+    World world;
 };
 
 class GameState : public State {
@@ -42,7 +45,7 @@ private:
     using StateManager = state::StateManager<GameStateStateType>;
 
 public:
-    GameState();
+    GameState(Window* window);
     ~GameState() = default;
 
     void update(Keyboard* keyboard) override;

@@ -3,6 +3,8 @@
 #ifndef GAME_SRC_STATE_STATE_H
 #define GAME_SRC_STATE_STATE_H
 
+#include "SFML/Graphics.hpp"
+
 #include "../utils/keyboard.h"
 #include "../utils/log.h"
 
@@ -15,26 +17,30 @@ namespace state {
 class State {
 protected:
     using Keyboard = utils::Keyboard;
+    using Window = sf::RenderWindow;
 
 public:
-    State() = default;
+    State(Window* window);
     virtual ~State() = default;
 
     virtual void update(Keyboard* keyboard) = 0;
+
+protected:
+    Window* window;
 };
 
 class MenuState : public State {
 public:
-    MenuState() = default;
-    ~MenuState() override = default;
+    MenuState(Window* window);
+    ~MenuState() = default;
 
     void update(Keyboard* keyboard) override;
 };
 
 class OptionsState : public State {
 public:
-    OptionsState() = default;
-    ~OptionsState() override = default;
+    OptionsState(Window* window);
+    ~OptionsState() = default;
 
     void update(Keyboard* keyboard) override;
 };

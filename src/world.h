@@ -8,6 +8,7 @@
 #include "utils/types.h"
 
 #include "subject/entity/entity.h"
+#include "subject/factory.h"
 #include "subject/goal.h"
 #include "subject/subject.h"
 
@@ -38,7 +39,7 @@ private:
     const f64 JUMP_FORCE{1.0f};
 
 public:
-    World();
+    World(const SubjectFactory& factory);
     ~World() = default;
 
     /// Updates the physics and goal-detection.

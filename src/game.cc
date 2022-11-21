@@ -28,9 +28,9 @@ Game::Game(WindowStyle style, u32 width, u32 height, const std::string& title, u
     : style(style), width(width), height(height),
       window(std::unique_ptr<Window>(this->create_window(width, height, title))), fps(fps), vsync(vsync),
       state_manager(StateManager::create_state_manager(StateType::GameState)
-                        .insert_state(StateType::GameState, new GameState())
-                        .insert_state(StateType::MenuState, new MenuState())
-                        .insert_state(StateType::OptionsState, new OptionsState())
+                        .insert_state(StateType::GameState, new GameState(&*this->window))
+                        .insert_state(StateType::MenuState, new MenuState(&*this->window))
+                        .insert_state(StateType::OptionsState, new OptionsState(&*this->window))
                         .build()),
       keyboard(Keyboard()) {}
 

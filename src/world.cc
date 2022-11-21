@@ -3,10 +3,10 @@
 #include "subject/tile.h"
 #include "utils/log.h"
 
-World::World()
-    : subjects([]() {
+World::World(const SubjectFactory& factory)
+    : subjects([&]() {
           std::map<usize, std::unique_ptr<Subject>> m;
-          m[0] = std::make_unique<Player>();
+          m[0] = std::unique_ptr<Player>(factory.create_player({0, 0}, {{0, 0}, {1, 1}}));
           m[1] = std::make_unique<Goal>();
           m[2] = std::make_unique<subject::Tile>();
           return m;
