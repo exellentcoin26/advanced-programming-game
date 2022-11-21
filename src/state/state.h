@@ -26,7 +26,7 @@ public:
 class MenuState : public State {
 public:
     MenuState() = default;
-    ~MenuState() override;
+    ~MenuState() override = default;
 
     void update(Keyboard* keyboard) override;
 };
@@ -34,7 +34,7 @@ public:
 class OptionsState : public State {
 public:
     OptionsState() = default;
-    ~OptionsState() override;
+    ~OptionsState() override = default;
 
     void update(Keyboard* keyboard) override;
 };

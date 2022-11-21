@@ -6,6 +6,8 @@
 #include "state.h"
 #include "statemanager.h"
 
+#include "../world.h"
+
 #include <unordered_map>
 
 namespace state {
@@ -13,17 +15,20 @@ namespace state {
 class LevelSelectorState : public State {
 public:
     LevelSelectorState() = default;
-    ~LevelSelectorState();
+    ~LevelSelectorState() = default;
 
     void update(Keyboard* keyboard) override;
 };
 
 class LevelState : public State {
 public:
-    LevelState() = default;
-    ~LevelState();
+    LevelState();
+    ~LevelState() = default;
 
     void update(Keyboard* keyboard) override;
+
+private:
+    World world{};
 };
 
 class GameState : public State {
