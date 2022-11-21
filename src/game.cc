@@ -55,7 +55,7 @@ sf::RenderWindow* Game::create_window(u32 width, u32 height, const std::string& 
 }
 
 void Game::start() {
-    log(Debug) << "Main game loop started!\n";
+    LOG(Debug) << "Main game loop started!\n";
 
     bool quit = false;
     std::shared_ptr<StopWatch> watch = StopWatch::get_instance();
@@ -104,7 +104,7 @@ void Game::start() {
 
             // log information and reset time
             if (std::chrono::duration_cast<std::chrono::milliseconds>(SystemClock::now() - time).count() >= 1000) {
-                log(Debug) << "fps: " << frames << '\n';
+                LOG(Debug) << "fps: " << frames << '\n';
 
                 time = SystemClock::now();
                 frames = 0;
