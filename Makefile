@@ -25,7 +25,7 @@ RM := rm -rf
 # =========================
 
 CPPFLAGS ?= -std=c++17 -Wall -Wextra -Wpedantic
-CPPFLAGS_DEBUG := -g -Og
+CPPFLAGS_DEBUG := -g
 
 CPPFLAGS += $(CPPFLAGS_DEBUG)
 
