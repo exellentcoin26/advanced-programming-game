@@ -25,6 +25,19 @@ public:
 
     ~Vec2() = default;
 
+    constexpr f64 get_x() const { return this->elements[0]; }
+    constexpr f64 get_y() const { return this->elements[1]; }
+
+    constexpr Vec2& xn(f64 y) {
+        this->elements[1] = y;
+        return *this;
+    }
+
+    constexpr Vec2& ny(f64 x) {
+        this->elements[0] = x;
+        return *this;
+    }
+
     constexpr Vec2 operator+(const Vec2& rhs) const {
         return {this->elements[0] + rhs.elements[0], this->elements[1] + rhs.elements[1]};
     }

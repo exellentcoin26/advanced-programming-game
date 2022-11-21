@@ -121,4 +121,23 @@ TEST_SUITE("vec2") {
 
         CHECK_THROWS_AS(a /= b, DivisionByZero);
     }
+
+    TEST_CASE("replace_x") {
+        Vec2 a{3.0, 3.0};
+
+        CHECK_EQ(a.ny(2.0), Vec2{2.0, 3.0});
+    }
+
+    TEST_CASE("replace_y") {
+        Vec2 a{3.0, 3.0};
+
+        CHECK_EQ(a.xn(2.0), Vec2{3.0, 2.0});
+    }
+
+    TEST_CASE("get_x_and_y") {
+        Vec2 a{2.0, 3.0};
+
+        CHECK_EQ(a.get_x(), 2.0);
+        CHECK_EQ(a.get_y(), 3.0);
+    }
 }
