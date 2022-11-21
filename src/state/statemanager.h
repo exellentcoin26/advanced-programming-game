@@ -62,7 +62,7 @@ public:
 
 private:
     StateManager(StateType start_state, std::unordered_map<StateType, std::unique_ptr<State>>&& states)
-        : current_state(start_state), states(std::move(states)) {}
+        : states(std::move(states)), current_state(start_state) {}
 
 private:
     const std::unordered_map<StateType, std::unique_ptr<State>> states;
