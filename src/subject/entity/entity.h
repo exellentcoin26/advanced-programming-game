@@ -34,7 +34,7 @@ protected:
 
 class Player : public Entity {
 public:
-    inline Player() : Entity({0, 10}, Bounds({0, 0}, {1, 1})) {}
+    inline Player(const Vec2& pos, const Bounds& bounds) : Entity(pos, bounds) {}
     ~Player() = default;
 
     constexpr Bounds::CollideInfo get_collision_info() const { return this->wall_collider; }

@@ -4,6 +4,13 @@
 #define GAME_SRC_SUBJECT_SUBJECT_H
 
 #include "../math/vec.h"
+#include "../observer/observer.h"
+
+#include <memory>
+#include <vector>
+
+template <typename T>
+class Observer;
 
 namespace subject {
 
@@ -54,17 +61,28 @@ public:
     Subject(const Vec2& pos, const Bounds& col);
     virtual ~Subject() = default;
 
-    inline Vec2 get_position() const { return this->pos; }
-    inline void set_position(const Vec2& pos) { this->pos = pos; }
+    constexpr Vec2 get_position() const { return this->pos; }
+    inline void set_position(const Vec2& pos) {
+        this->pos = pos;
+        for (auto& observer : this->observers) {
+            observer->notify(*this, ObserverEvent::PositionChange);
+        }
+    }
 
     /// Returns the absolute coordinate bounds of the subject
     inline Bounds get_abs_bounds() const { return {this->col.get_position() + this->pos, this->col.get_size()}; }
     constexpr Bounds get_rel_bounds() const { return this->col; }
 
+    /// Adds observer to observer list
+    void subscribe(std::unique_ptr<Observer<Subject>> observer);
+
 protected:
-    // normalized position between (width; height)[-1, 1; -1, h] of the left under corner
+    /// normalized position between (width; height)[-1, 1; -1, h]
     Vec2 pos{};
     Bounds col{};
+
+    /// List of observers
+    std::vector<std::unique_ptr<Observer<Subject>>> observers{};
 };
 
 }; // namespace subject

@@ -19,3 +19,5 @@ bool Bounds::collides(const Bounds& rhs) const {
 }
 
 Subject::Subject(const Vec2& pos, const Bounds& col) : pos(pos), col(col) {}
+
+void Subject::subscribe(std::unique_ptr<Observer<Subject>> observer) { this->observers.push_back(std::move(observer)); }
