@@ -25,6 +25,7 @@ public:
     virtual Vec2 project() const;
 
     constexpr const Vec2& get_velocity() const { return this->velocity; }
+    constexpr Vec2& get_mut_velocity() { return this->velocity; }
     constexpr void set_velocity(const Vec2& vel) { this->velocity = vel; }
 
 protected:

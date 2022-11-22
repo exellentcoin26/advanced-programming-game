@@ -18,7 +18,7 @@ protected:
     using Player = subject::entity::Player;
 
 public:
-    inline PlayerViewSFML(std::shared_ptr<Window> window) : SubjectRenderer(window) {}
+    inline PlayerViewSFML(std::shared_ptr<Window> window) : window(window) {}
     ~PlayerViewSFML() = default;
 
     void notify(const subject::Subject& source, ObserverEvent event) override {
@@ -31,8 +31,8 @@ public:
         }
     }
 
-protected:
-    Window* window;
+private:
+    std::shared_ptr<Window> window;
 };
 
 } // namespace view

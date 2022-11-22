@@ -87,13 +87,18 @@ void World::entity_check_collision(usize e_idx, const Bounds& old_bounds, const 
         if (new_bounds_x.collides(s->get_abs_bounds())) {
             // check for wall collision
             new_pos.ny(old_bounds.get_position().get_x());
+
+            // set volocity on x axis to zero
+            e->get_mut_velocity().ny(0.0);
         }
 
         // check for y axis
         if (new_bounds_y.collides(s->get_abs_bounds())) {
             // check for ground collision
             new_pos.xn(old_bounds.get_position().get_y());
-            e->set_velocity({0, 0});
+
+            // set velocity on y axis to zero
+            e->get_mut_velocity().xn(0.0);
         }
 
         // early-return if there has been a collision at both axes
