@@ -6,6 +6,7 @@
 #include "SFML/Graphics.hpp"
 
 #include "../../subject/entity/entity.h"
+#include "../../subject/subject.h"
 #include "../../utils/log.h"
 #include "../observer.h"
 
@@ -17,7 +18,7 @@ protected:
     using Player = subject::entity::Player;
 
 public:
-    inline PlayerViewSFML(Window* window) : window(window) {}
+    inline PlayerViewSFML(std::shared_ptr<Window> window) : SubjectRenderer(window) {}
     ~PlayerViewSFML() = default;
 
     void notify(const subject::Subject& source, ObserverEvent event) override {

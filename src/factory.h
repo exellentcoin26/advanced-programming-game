@@ -12,7 +12,7 @@ private:
     using Window = sf::RenderWindow;
 
 public:
-    inline SFMLSubjectFactory(Window* window) : window(window) {}
+    inline SFMLSubjectFactory(std::shared_ptr<Window> window) : window(window) {}
     ~SFMLSubjectFactory() = default;
 
     /// Construct subject with attached SFML specific view and return pointer.
@@ -25,7 +25,7 @@ public:
     Player* create_player(const Vec2& pos, const Bounds& bounds) const override;
 
 private:
-    Window* window;
+    std::shared_ptr<Window> window;
 };
 
 #endif // GAME_SRC_FACTORY_H

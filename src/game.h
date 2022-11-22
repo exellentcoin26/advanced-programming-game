@@ -86,7 +86,7 @@ private:
 private:
     const WindowStyle style;
     const u32 width, height;
-    std::unique_ptr<Window> window;
+    std::shared_ptr<Window> window;
 
     const u32 fps;
     const bool vsync{};

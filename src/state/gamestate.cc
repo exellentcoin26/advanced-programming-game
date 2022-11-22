@@ -6,11 +6,11 @@
 
 using namespace state;
 
-LevelSelectorState::LevelSelectorState(Window* window) : State(window) {}
+LevelSelectorState::LevelSelectorState(std::shared_ptr<Window> window) : State(window) {}
 
 void LevelSelectorState::update(Keyboard* keyboard) {}
 
-LevelState::LevelState(Window* window) : State(window), world(World(SFMLSubjectFactory(window))) {}
+LevelState::LevelState(std::shared_ptr<Window> window) : State(window), world(World(SFMLSubjectFactory(window))) {}
 
 void state::LevelState::update(Keyboard* keyboard) {
     std::optional<Input> input;
@@ -26,7 +26,7 @@ void state::LevelState::update(Keyboard* keyboard) {
     this->world.update();
 }
 
-GameState::GameState(Window* window)
+GameState::GameState(std::shared_ptr<Window> window)
     : State(window),
       state_manager(StateManager::create_state_manager(GameStateStateType::LevelState)
                         .insert_state(GameStateStateType::LevelState, new LevelState(window))

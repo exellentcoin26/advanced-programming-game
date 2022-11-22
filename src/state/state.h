@@ -20,18 +20,18 @@ protected:
     using Window = sf::RenderWindow;
 
 public:
-    State(Window* window);
+    State(std::shared_ptr<Window> window);
     virtual ~State() = default;
 
     virtual void update(Keyboard* keyboard) = 0;
 
 protected:
-    Window* window;
+    std::shared_ptr<Window> window;
 };
 
 class MenuState : public State {
 public:
-    MenuState(Window* window);
+    MenuState(std::shared_ptr<Window> window);
     ~MenuState() = default;
 
     void update(Keyboard* keyboard) override;
@@ -39,7 +39,7 @@ public:
 
 class OptionsState : public State {
 public:
-    OptionsState(Window* window);
+    OptionsState(std::shared_ptr<Window> window);
     ~OptionsState() = default;
 
     void update(Keyboard* keyboard) override;

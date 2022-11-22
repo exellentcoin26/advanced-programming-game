@@ -2,12 +2,12 @@
 
 using namespace state;
 
-State::State(Window* window) : window(window) {}
+State::State(std::shared_ptr<Window> window) : window(window) {}
 
-MenuState::MenuState(Window* window) : State(window) {}
+MenuState::MenuState(std::shared_ptr<Window> window) : State(window) {}
 
 void state::MenuState::update(Keyboard* keyboard) {}
 
-OptionsState::OptionsState(Window* window) : State(window) {}
+OptionsState::OptionsState(std::shared_ptr<Window> window) : State(window) {}
 
 void state::OptionsState::update(Keyboard* keyboard) {}
