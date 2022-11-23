@@ -69,6 +69,9 @@ public:
         }
     }
 
+    /// Updates the intern state of the subject
+    virtual void update() = 0;
+
     /// Returns the absolute coordinate bounds of the subject
     inline Bounds get_abs_bounds() const { return {this->col.get_position() + this->pos, this->col.get_size()}; }
     constexpr Bounds get_rel_bounds() const { return this->col; }

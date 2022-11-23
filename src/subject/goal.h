@@ -7,7 +7,10 @@
 
 namespace subject {
 
-class Goal : public Subject {};
+class Goal : public Subject {
+public:
+    inline void update() override {}
+};
 
 }; // namespace subject
 

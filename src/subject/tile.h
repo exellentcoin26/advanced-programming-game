@@ -11,6 +11,8 @@ class Tile : public Subject {
 public:
     inline Tile() : Subject({0, 0}, Bounds({0, 0}, {4.0, 4.0})) {}
     virtual ~Tile() = default;
+
+    inline void update() override {}
 };
 
 } // namespace subject
