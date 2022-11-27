@@ -2,8 +2,6 @@
 
 #include "../../utils/log.h"
 
-#include <dbg.h>
-
 using namespace view;
 
 SubjectViewSFML::SubjectViewSFML(std::shared_ptr<Window> window, std::shared_ptr<Sprite> sprite)
@@ -29,7 +27,7 @@ void SubjectViewSFML::notify(const subject::Subject& source, ObserverEvent event
 
 void SubjectViewSFML::render(const math::Vec2& pos, const Camera& cam) {
     // project `pos` to camera coordinate system
-    const auto& cam_coord_pos = dbg(cam.project(pos));
+    const auto& cam_coord_pos = cam.project(pos);
 
     if (!cam_coord_pos.has_value())
         return;
@@ -42,8 +40,6 @@ void SubjectViewSFML::render(const math::Vec2& pos, const Camera& cam) {
 
     math::Vec2 render_pos = cam_coord_pos.value() * scale;
     render_pos.xn(this->window->getSize().y - render_pos.get_y());
-
-    dbg(render_pos);
 
     auto sprite = *this->sprite;
     sprite.setPosition(render_pos.get_x(), render_pos.get_y());

@@ -3,15 +3,15 @@
 #include "subject/tile.h"
 #include "utils/log.h"
 
-World::World(const SubjectFactory& factory)
-    : subjects([&]() {
+World::World(std::shared_ptr<Camera> cam, std::shared_ptr<SubjectFactory> factory)
+    : camera(cam), subjects([&]() {
           std::map<usize, std::unique_ptr<Subject>> m;
-          m[0] = std::unique_ptr<Player>(factory.create_player({0, 0}, {{0, 0}, {1, 1}}));
+          m[0] = std::unique_ptr<Player>(factory->create_player(cam, {0, 1}, {{0, 0}, {1, 1}}));
           m[1] = std::make_unique<Goal>();
           m[2] = std::make_unique<subject::Tile>();
           return m;
       }()),
-      entities({0}), player(0), goal(1) {}
+      entities({0}), player(0), goal(1), factory(factory) {}
 
 void World::update() {
     // LOG(Debug) << "Update\n";
@@ -23,8 +23,8 @@ void World::update() {
         // apply gravity to entity
         e->apply_force(Vec2{0, -GRAVITY});
 
-        // update internal state of entity
-        e->update();
+        // update internal physics state of entity
+        e->update_physics();
 
         // update entity position based on collision
         // construct projeced bounds for move along x and the same for y
@@ -38,37 +38,41 @@ void World::update() {
 
         // check collision and update position plus internal state of entity
         this->entity_check_collision(e_idx, old_bounds, new_bounds_x, new_bounds_y);
+
+        e->update();
     }
 }
 
-void World::move_player(Input input) {
+void World::move_player(const std::set<Input>& input) {
     Player* player = static_cast<Player*>(&*this->subjects.at(this->player));
 
-    switch (input) {
-    case Input::Left:
-        LOG(Debug) << "Move Left\n";
+    for (auto move : input) {
+        switch (move) {
+        case Input::Left:
+            LOG(Debug) << "Move Left\n";
 
-        player->apply_force(Vec2{-MOVEMENT_FORCE, 0});
-        break;
+            player->apply_force(Vec2{-MOVEMENT_FORCE, 0});
+            break;
 
-    case Input::Right:
-        LOG(Debug) << "Move Right\n";
+        case Input::Right:
+            LOG(Debug) << "Move Right\n";
 
-        player->apply_force(Vec2{MOVEMENT_FORCE, 0});
-        break;
+            player->apply_force(Vec2{MOVEMENT_FORCE, 0});
+            break;
 
-    case Input::Jump:
-        if (player->get_collision_info().down) {
-            LOG(Debug) << "Jump!\n";
+        case Input::Jump:
+            if (player->get_collision_info().down) {
+                LOG(Debug) << "Jump!\n";
 
-            player->apply_force(Vec2{0, JUMP_FORCE});
+                player->apply_force(Vec2{0, JUMP_FORCE});
 
-        } else if (player->get_collision_info().is_wall_colliding()) {
-            LOG(Debug) << "Wall Jump!\n";
+            } else if (player->get_collision_info().is_wall_colliding()) {
+                LOG(Debug) << "Wall Jump!\n";
 
-            player->apply_force(Vec2{(player->get_collision_info().left) ? JUMP_FORCE : -JUMP_FORCE, JUMP_FORCE});
+                player->apply_force(Vec2{(player->get_collision_info().left) ? JUMP_FORCE : -JUMP_FORCE, JUMP_FORCE});
+            }
+            break;
         }
-        break;
     }
 }
 
@@ -79,7 +83,7 @@ void World::entity_check_collision(usize e_idx, const Bounds& old_bounds, const 
 
     for (const auto& [s_idx, s] : this->subjects) {
 
-        if (this->entities.find(s_idx) != this->entities.end())
+        if (this->entities.find(s_idx) != this->entities.end() || s_idx == this->goal)
             // ignore other entities for collision
             continue;
 

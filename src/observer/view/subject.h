@@ -32,9 +32,6 @@ public:
 private:
     std::shared_ptr<Window> window{};
     std::shared_ptr<Sprite> sprite{};
-
-    /// Scale factor used for scaling coordinates
-    const f64 factor{};
 };
 
 } // namespace view

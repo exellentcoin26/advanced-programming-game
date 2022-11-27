@@ -3,6 +3,7 @@
 #ifndef GAME_SRC_SUBJECT_SUBJECT_H
 #define GAME_SRC_SUBJECT_SUBJECT_H
 
+#include "../camera.h"
 #include "../math/vec.h"
 #include "../observer/observer.h"
 
@@ -62,15 +63,10 @@ public:
     virtual ~Subject() = default;
 
     constexpr Vec2 get_position() const { return this->pos; }
-    inline void set_position(const Vec2& pos) {
-        this->pos = pos;
-        for (auto& observer : this->observers) {
-            observer->notify(*this, ObserverEvent::PositionChange);
-        }
-    }
+    inline void set_position(const Vec2& pos) { this->pos = pos; }
 
     /// Updates the intern state of the subject
-    virtual void update() = 0;
+    virtual void update();
 
     /// Returns the absolute coordinate bounds of the subject
     inline Bounds get_abs_bounds() const { return {this->col.get_position() + this->pos, this->col.get_size()}; }
@@ -79,15 +75,22 @@ public:
     /// Adds observer to observer list
     void subscribe(std::unique_ptr<Observer<Subject>> observer);
 
+    /// Attaches the given camera to the subject.
+    inline void attach_camera(std::shared_ptr<Camera> camera) { this->camera = camera; }
+    /// Returns reference to Camera
+    constexpr const Camera& get_camera() const { return *this->camera; }
+
 protected:
     /// normalized position between (width; height)[-1, 1; -1, h]
     Vec2 pos{};
     Bounds col{};
 
-    /// List of observers
+    /// list of observers
     std::vector<std::unique_ptr<Observer<Subject>>> observers{};
+
+    std::shared_ptr<Camera> camera;
 };
 
-}; // namespace subject
+} // namespace subject
 
 #endif // GAME_SRC_SUBJECT_SUBJECT_H

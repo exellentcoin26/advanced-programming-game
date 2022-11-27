@@ -18,8 +18,8 @@ public:
     /// Apllies force to acceleration of entity.
     virtual void apply_force(const Vec2& f);
 
-    /// Updates the position using the velocity and the applied forces.
-    void update() override;
+    /// Update the internal state of the physics of the entity.
+    void update_physics();
 
     /// Returns the new position if the forces and velocity would be applied.
     virtual Vec2 project() const;

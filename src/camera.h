@@ -8,8 +8,6 @@
 
 #include <optional>
 
-#include <dbg.h>
-
 class Camera {
 public:
     constexpr Camera(f64 height, f64 offset, f64 increment = 0.0)
@@ -38,7 +36,6 @@ public:
 
     /// Projects the `pos` to camera coordinate space.
     inline std::optional<math::Vec2> project(const math::Vec2& pos) const {
-        dbg(pos);
         if (this->is_out_of_view(pos))
             return std::nullopt;
 

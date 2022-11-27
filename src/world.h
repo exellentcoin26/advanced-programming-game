@@ -7,6 +7,7 @@
 #include "utils/keyboard.h"
 #include "utils/types.h"
 
+#include "camera.h"
 #include "subject/entity/entity.h"
 #include "subject/factory.h"
 #include "subject/goal.h"
@@ -33,20 +34,20 @@ private:
     using Vec2 = math::Vec2;
 
 private:
-    const f64 GRAVITY{1.0f};
-    const f64 MAX_MOVEMENT_SPEED{1.0f};
-    const f64 MOVEMENT_FORCE{1.0f};
+    const f64 GRAVITY{0.1f};
+    const f64 MAX_MOVEMENT_SPEED{0.05f};
+    const f64 MOVEMENT_FORCE{0.001f};
     const f64 JUMP_FORCE{1.0f};
 
 public:
-    World(const SubjectFactory& factory);
+    World(std::shared_ptr<Camera> cam, std::shared_ptr<SubjectFactory> factory);
     ~World() = default;
 
     /// Updates the physics and goal-detection.
     void update();
 
     /// Tries to move player using input
-    void move_player(Input input);
+    void move_player(const std::set<Input>& input);
 
 private:
     /// Checks collision with all entities per axis and updates the internal state of the entity
@@ -54,6 +55,9 @@ private:
                                 const Bounds& new_bounds_y);
 
 private:
+    /// camera that defines the view of the world
+    std::shared_ptr<Camera> camera;
+
     /// list of all subjects in this world
     std::map<usize, std::unique_ptr<Subject>> subjects;
 
@@ -62,6 +66,9 @@ private:
 
     const usize player;
     const usize goal;
+
+    /// contiains textures
+    std::shared_ptr<SubjectFactory> factory;
 };
 
 #endif // GAME_SRC_WORLD_H

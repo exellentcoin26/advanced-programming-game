@@ -10,16 +10,24 @@ LevelSelectorState::LevelSelectorState(std::shared_ptr<Window> window) : State(w
 
 void LevelSelectorState::update(Keyboard* keyboard) {}
 
-LevelState::LevelState(std::shared_ptr<Window> window) : State(window), world(World(SFMLSubjectFactory(window))) {}
+LevelState::LevelState(std::shared_ptr<Window> window)
+    : State(window), world(World(std::make_shared<Camera>(2.0, 0.0), std::make_shared<SFMLSubjectFactory>(window))) {}
 
 void state::LevelState::update(Keyboard* keyboard) {
-    std::optional<Input> input;
-    if (keyboard->is_key_down(Keyboard::Key::A))
-        input = Input::Left;
-    else if (keyboard->is_key_down(Keyboard::Key::D))
-        input = Input::Right;
-    else if (keyboard->is_key_pressed(Keyboard::Key::Space))
-        input = Input::Jump;
+    std::optional<std::set<Input>> input{};
+    if (keyboard->is_key_down(Keyboard::Key::A)) {
+        if (!input.has_value())
+            input = std::set<Input>{};
+        input->insert(Input::Left);
+    } else if (keyboard->is_key_down(Keyboard::Key::D)) {
+        if (!input.has_value())
+            input = std::set<Input>{};
+        input->insert(Input::Right);
+    } else if (keyboard->is_key_pressed(Keyboard::Key::Space)) {
+        if (!input.has_value())
+            input = std::set<Input>{};
+        input->insert(Input::Jump);
+    }
 
     if (input.has_value())
         this->world.move_player(input.value());

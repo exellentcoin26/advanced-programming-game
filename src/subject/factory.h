@@ -21,16 +21,16 @@ public:
     SubjectFactory() = default;
     virtual ~SubjectFactory() = default;
 
-    /* This looks like I should use templates, but the idea is that not all functions should take the same arguments */
+    /* This looks like I should use an enum, but the idea is that not all functions should take the same arguments */
 
     /// Construct subject and return pointer.
-    virtual Subject* create_subject(const Vec2& pos, const Bounds& bounds) const = 0;
+    virtual Subject* create_subject(std::shared_ptr<Camera> cam, const Vec2& pos, const Bounds& bounds) const = 0;
 
     /// Construct entity and return pointer.
-    virtual Entity* create_entity(const Vec2& pos, const Bounds& bounds) const = 0;
+    virtual Entity* create_entity(std::shared_ptr<Camera> cam, const Vec2& pos, const Bounds& bounds) const = 0;
 
     /// Construct player and return pointer.
-    virtual Player* create_player(const Vec2& pos, const Bounds& bounds) const = 0;
+    virtual Player* create_player(std::shared_ptr<Camera> cam, const Vec2& pos, const Bounds& bounds) const = 0;
 };
 
 #endif // GAME_SRC_SUBJECT_FACTORY_H
