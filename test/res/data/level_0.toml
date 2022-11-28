@@ -1,0 +1,16 @@
+[camera]
+height = 2
+increment = 0
+
+[level]
+map = '''
+xxxxxxxxxx
+x        x
+x        x
+x        x
+x        x
+x        x
+x        x
+xp      gx
+xxxxxxxxxx
+'''
