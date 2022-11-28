@@ -7,5 +7,6 @@
 
 -Ilib/sfml/include
 -Ilib/doctest/include
+-Ilib/tomlplusplus/include
 
 -DTEST

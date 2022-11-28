@@ -25,7 +25,7 @@ RM := rm -rf
 # =========================
 
 CPPFLAGS ?= -std=c++17 -Wall -Wextra -Wpedantic
-CPPFLAGS_DEBUG := -g
+CPPFLAGS_DEBUG := -g -O0 -fdebug-default-version=4
 
 CPPFLAGS += $(CPPFLAGS_DEBUG)
 
@@ -35,6 +35,7 @@ OBJS := $(patsubst %.$(CPP_SRC_EXTENSION),$(BUILDDIR)/%.o,$(SRCS))
 TEST_SRCS := $(shell find $(TESTDIR) -name "*.$(CPP_SRC_EXTENSION)")
 
 # list testable source files here
+TEST_SRCS += $(SRCDIR)/utils/levelloader.$(CPP_SRC_EXTENSION)
 
 TEST_OBJS := $(patsubst %.$(CPP_SRC_EXTENSION),$(BUILDDIR)/%.o,$(TEST_SRCS))
 
@@ -52,6 +53,7 @@ SFML_TARGETS := sfml-system sfml-window sfml-graphics
 # =========================
 
 INCFLAGS += -I$(LIBDIR)/sfml/include
+INCFLAGS += -I$(LIBDIR)/tomlplusplus/include
 
 TEST_INCFALGS += -I$(LIBDIR)/doctest/include
 
@@ -68,7 +70,7 @@ LDFLAGS += -lGL -lX11 -ludev -lpthread -lXrandr
 
 .PHONY: all lib run clean clean-all build-test
 
-all: build
+all: build build-test
 
 build: $(BUILDDIR)/$(BIN)
 
@@ -91,6 +93,7 @@ lib:
 
 run: build
 	./seg_wrapper.sh $(BUILDDIR)/$(BIN)
+	# $(BUILDDIR)/$(BIN)
 
 test: build-test
 	$(BUILDDIR)/$(TEST)
