@@ -63,3 +63,13 @@ subject::entity::Player* SFMLSubjectFactory::create_player(std::shared_ptr<Camer
 
     return player;
 }
+
+subject::Goal* SFMLSubjectFactory::create_goal(std::shared_ptr<Camera> cam, const Vec2& pos,
+                                               const Bounds& bounds) const {
+    return nullptr;
+}
+
+subject::Tile* SFMLSubjectFactory::create_tile(std::shared_ptr<Camera> cam, const Vec2& pos,
+                                               const Bounds& bounds) const {
+    return nullptr;
+}

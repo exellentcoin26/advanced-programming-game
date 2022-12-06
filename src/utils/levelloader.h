@@ -4,9 +4,9 @@
 #define GAME_SRC_UTILS_LEVELLOADER_H
 
 #include "../math/vec.h"
-#include "../world.h"
 
 #include <exception>
+#include <optional>
 #include <string_view>
 #include <vector>
 

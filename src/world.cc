@@ -3,15 +3,37 @@
 #include "subject/tile.h"
 #include "utils/log.h"
 
-World::World(std::shared_ptr<Camera> cam, std::shared_ptr<SubjectFactory> factory)
-    : camera(cam), subjects([&]() {
-          std::map<usize, std::unique_ptr<Subject>> m;
-          m[0] = std::unique_ptr<Player>(factory->create_player(cam, {0, 1}, {{0, 0}, {0.3, 0.3}}));
-          m[1] = std::make_unique<Goal>();
-          m[2] = std::make_unique<subject::Tile>();
-          return m;
-      }()),
-      entities({0}), player(0), goal(1), factory(factory) {}
+World::World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory> factory) {
+    // construct `World` from `level_info`
+
+    // create camera
+    this->camera = std::make_shared<Camera>(level_info.camera_height, 0, level_info.camera_increment);
+
+    // A player is about 0.75 percent of a tile
+    // calculate factor to restrict the world to be within [-1, 1] on width and [-1, h] on heigh
+    // the level width is set to 2
+    const f64 scale = 2.0 / level_info.size.get_x();
+
+    // add player
+    this->player = this->subjects.size();
+    this->subjects[this->player] = std::unique_ptr<Player>(factory->create_player(
+        this->camera, level_info.player * scale - Vec2(1.0, 1.0), Bounds({0, 0}, {scale * 0.75, scale * 0.75})));
+
+    // add goal
+    this->goal = this->subjects.size();
+    this->subjects[this->goal] = std::unique_ptr<Goal>(factory->create_goal(
+        this->camera, level_info.goal * scale - Vec2(1.0, 1.0), Bounds({0, 0}, {scale * 0.6, scale * 0.6})));
+
+    // add player and goal to entities
+    this->entities.insert(this->player);
+    this->entities.insert(this->goal);
+
+    // add tiles
+    for (const Vec2& tile_pos : level_info.tiles) {
+        this->subjects[this->subjects.size()] = std::unique_ptr<Tile>(
+            factory->create_tile(this->camera, tile_pos * scale - Vec2(1.0, 1.0), Bounds({0, 0}, {scale, scale})));
+    }
+}
 
 void World::update() {
     // LOG(Debug) << "Update\n";

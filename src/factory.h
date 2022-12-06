@@ -31,6 +31,12 @@ public:
     /// Construct player with attached SFML specific view and return pointer.
     Player* create_player(std::shared_ptr<Camera> cam, const Vec2& pos, const Bounds& bounds) const override;
 
+    /// Construct goal with attached SFML specific view and return pointer.
+    Goal* create_goal(std::shared_ptr<Camera> cam, const Vec2& pos, const Bounds& bounds) const override;
+
+    /// Construct tile with attached SFML specific view and return pointer.
+    Tile* create_tile(std::shared_ptr<Camera> cam, const Vec2& pos, const Bounds& bounds) const override;
+
 private:
     std::shared_ptr<Window> window{};
     std::unique_ptr<sf::Texture> spritesheet{};

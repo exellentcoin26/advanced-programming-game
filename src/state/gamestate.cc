@@ -11,7 +11,11 @@ LevelSelectorState::LevelSelectorState(std::shared_ptr<Window> window) : State(w
 void LevelSelectorState::update(Keyboard* keyboard) {}
 
 LevelState::LevelState(std::shared_ptr<Window> window)
-    : State(window), world(World(std::make_shared<Camera>(2.0, 0.0), std::make_shared<SFMLSubjectFactory>(window))) {}
+    : State(window), world([&]() -> World {
+          level::LevelInfo level_info = level::load_level_from_file("tmp.toml");
+
+          return World(level_info, std::make_shared<SFMLSubjectFactory>(window));
+      }()) {}
 
 void state::LevelState::update(Keyboard* keyboard) {
     std::optional<std::set<Input>> input{};

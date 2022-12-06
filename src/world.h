@@ -12,6 +12,8 @@
 #include "subject/factory.h"
 #include "subject/goal.h"
 #include "subject/subject.h"
+#include "subject/tile.h"
+#include "utils/levelloader.h"
 
 #include <map>
 #include <memory>
@@ -30,6 +32,7 @@ private:
     using Goal = subject::Goal;
     using Player = subject::entity::Player;
     using Bounds = subject::Bounds;
+    using Tile = subject::Tile;
 
     using Vec2 = math::Vec2;
 
@@ -40,7 +43,7 @@ private:
     const f64 JUMP_FORCE{1.0f};
 
 public:
-    World(std::shared_ptr<Camera> cam, std::shared_ptr<SubjectFactory> factory);
+    World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory> factory);
     ~World() = default;
 
     /// Updates the physics and goal-detection.
@@ -56,16 +59,18 @@ private:
 
 private:
     /// camera that defines the view of the world
-    std::shared_ptr<Camera> camera;
+    std::shared_ptr<Camera> camera{};
 
     /// list of all subjects in this world
-    std::map<usize, std::unique_ptr<Subject>> subjects;
+    std::map<usize, std::unique_ptr<Subject>> subjects{};
 
     /// list of all indexes that are entities
-    std::set<usize> entities;
+    std::set<usize> entities{};
 
-    const usize player;
-    const usize goal;
+    /// pointer to player in `subjects` map
+    usize player{};
+    /// pointer to goal in `subjects` map
+    usize goal{};
 
     /// contiains textures
     std::shared_ptr<SubjectFactory> factory;
