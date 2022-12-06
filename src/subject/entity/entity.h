@@ -10,6 +10,10 @@ namespace subject {
 namespace entity {
 
 class Entity : public Subject {
+protected:
+    const f64 MAX_MOVEMENT_SPEED{0.2f};
+    const f64 DRAG_FORCE{0.1f};
+
 public:
     Entity() = default;
     inline Entity(const Vec2& pos, const Bounds& bounds) : Subject(pos, bounds) {}

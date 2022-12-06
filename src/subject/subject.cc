@@ -21,6 +21,7 @@ bool Bounds::collides(const Bounds& rhs) const {
 Subject::Subject(const Vec2& pos, const Bounds& col) : pos(pos), col(col) {}
 
 void Subject::update() {
+    // TODO: change event name
     for (auto& observer : this->observers) {
         observer->notify(*this, ObserverEvent::PositionChange);
     }

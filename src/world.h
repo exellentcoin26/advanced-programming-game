@@ -38,8 +38,7 @@ private:
 
 private:
     const f64 GRAVITY{0.1f};
-    const f64 MAX_MOVEMENT_SPEED{0.05f};
-    const f64 MOVEMENT_FORCE{0.001f};
+    const f64 MOVEMENT_FORCE{0.1f};
     const f64 JUMP_FORCE{1.0f};
 
 public:
