@@ -5,7 +5,7 @@
 
 TEST_SUITE("levelloader") {
     TEST_CASE("level_0") {
-        const LevelLoader::LevelInfo level_info = LevelLoader::load_level_from_file("./test/res/data/level_0.toml");
+        const level::LevelInfo level_info = level::load_level_from_file("./test/res/data/level_0.toml");
 
         const u32 camera_height{2};
         const f64 camera_increment{0};

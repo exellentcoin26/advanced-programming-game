@@ -104,7 +104,7 @@ void Game::start() {
 
             // log information and reset time
             if (std::chrono::duration_cast<std::chrono::milliseconds>(SystemClock::now() - time).count() >= 1000) {
-                LOG(Debug) << "fps: " << frames << '\n';
+                LOG(Info) << "fps: " << frames << '\n';
 
                 time = SystemClock::now();
                 frames = 0;

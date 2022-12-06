@@ -3,8 +3,8 @@
 #ifndef GAME_SRC_WORLD_H
 #define GAME_SRC_WORLD_H
 
+#include "controllers/keyboard.h"
 #include "math/vec.h"
-#include "utils/keyboard.h"
 #include "utils/types.h"
 
 #include "camera.h"

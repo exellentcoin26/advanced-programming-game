@@ -6,7 +6,7 @@
 World::World(std::shared_ptr<Camera> cam, std::shared_ptr<SubjectFactory> factory)
     : camera(cam), subjects([&]() {
           std::map<usize, std::unique_ptr<Subject>> m;
-          m[0] = std::unique_ptr<Player>(factory->create_player(cam, {0, 1}, {{0, 0}, {1, 1}}));
+          m[0] = std::unique_ptr<Player>(factory->create_player(cam, {0, 1}, {{0, 0}, {0.3, 0.3}}));
           m[1] = std::make_unique<Goal>();
           m[2] = std::make_unique<subject::Tile>();
           return m;

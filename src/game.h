@@ -5,10 +5,10 @@
 
 #include "SFML/Graphics.hpp"
 
+#include "controllers/keyboard.h"
 #include "state/gamestate.h"
 #include "state/state.h"
 #include "state/statemanager.h"
-#include "utils/keyboard.h"
 #include "utils/log.h"
 #include "utils/stopwatch.h"
 #include "utils/types.h"
@@ -37,7 +37,7 @@ private:
 
 private:
     using Window = sf::RenderWindow;
-    using Keyboard = utils::Keyboard;
+    using Keyboard = controls::Keyboard;
     using StopWatch = utils::StopWatch;
 
     using SystemClock = std::chrono::system_clock;

@@ -7,7 +7,7 @@
 
 #include <bitset>
 
-namespace utils {
+namespace controls {
 
 /// Keyboard listener class
 class Keyboard {
@@ -38,6 +38,6 @@ private:
     std::bitset<Key::KeyCount> can_press;
 };
 
-} // namespace utils
+} // namespace controls
 
 #endif // GAME_SRC_UTILS_KEYBOARD_H

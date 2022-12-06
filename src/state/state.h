@@ -5,7 +5,7 @@
 
 #include "SFML/Graphics.hpp"
 
-#include "../utils/keyboard.h"
+#include "../controllers/keyboard.h"
 #include "../utils/log.h"
 
 #include <memory>
@@ -16,7 +16,7 @@ namespace state {
 
 class State {
 protected:
-    using Keyboard = utils::Keyboard;
+    using Keyboard = controls::Keyboard;
     using Window = sf::RenderWindow;
 
 public:

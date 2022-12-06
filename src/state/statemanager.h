@@ -3,7 +3,7 @@
 #ifndef GAME_SRC_STATE_STATEMANAGER_H
 #define GAME_SRC_STATE_STATEMANAGER_H
 
-#include "../utils/keyboard.h"
+#include "../controllers/keyboard.h"
 #include "../utils/log.h"
 #include "state.h"
 
@@ -15,7 +15,7 @@ namespace state {
 template <typename StateType>
 class StateManager {
 private:
-    using Keyboard = utils::Keyboard;
+    using Keyboard = controls::Keyboard;
 
     using State = state::State;
 

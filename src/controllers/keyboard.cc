@@ -1,13 +1,15 @@
 #include "keyboard.h"
 
-#include "types.h"
+#include "../utils/types.h"
 
-utils::Keyboard::Keyboard() {
+using namespace controls;
+
+Keyboard::Keyboard() {
     // set all bits to 1
     this->can_press.set();
 }
 
-void utils::Keyboard::update() {
+void Keyboard::update() {
     // check the current state for every key in the enum
     for (u32 i = 0; i < Key::KeyCount; ++i) {
         // reset the value for `key_pressed` and `key_released`
@@ -36,6 +38,6 @@ void utils::Keyboard::update() {
     }
 }
 
-bool utils::Keyboard::is_key_down(Key key) const { return this->key_down.test(static_cast<u32>(key)); }
-bool utils::Keyboard::is_key_pressed(Key key) const { return this->key_pressed.test(static_cast<u32>(key)); }
-bool utils::Keyboard::is_key_released(Key key) const { return this->key_released.test(static_cast<u32>(key)); }
+bool Keyboard::is_key_down(Key key) const { return this->key_down.test(static_cast<u32>(key)); }
+bool Keyboard::is_key_pressed(Key key) const { return this->key_pressed.test(static_cast<u32>(key)); }
+bool Keyboard::is_key_released(Key key) const { return this->key_released.test(static_cast<u32>(key)); }

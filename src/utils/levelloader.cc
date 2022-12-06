@@ -4,7 +4,9 @@
 
 #include "types.h"
 
-LevelLoader::LevelInfo LevelLoader::load_level_from_file(std::string_view filepath) {
+using namespace level;
+
+LevelInfo level::load_level_from_file(std::string_view filepath) {
     LevelLoaderExceptionVec exceptions{};
 
     auto config = toml::parse_file(filepath);
@@ -17,9 +19,8 @@ LevelLoader::LevelInfo LevelLoader::load_level_from_file(std::string_view filepa
 
     const auto opt_level_map = config["level"]["map"].value<std::string_view>();
 
-    if (!opt_level_map.has_value()) {
+    if (!opt_level_map.has_value())
         exceptions.emplace_back("`level` value not set");
-    }
 
     //      Camera
 
@@ -54,7 +55,7 @@ LevelLoader::LevelInfo LevelLoader::load_level_from_file(std::string_view filepa
             throw exceptions;
         }
 
-        for (unsigned int i = 0; i < line.size(); ++i) {
+        for (u32 i = 0; i < line.size(); ++i) {
             switch (line.at(i)) {
             case 'x':
                 // tile
