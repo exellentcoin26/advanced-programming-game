@@ -7,7 +7,7 @@ TEST_SUITE("levelloader") {
     TEST_CASE("level_0") {
         const level::LevelInfo level_info = level::load_level_from_file("./test/res/data/level_0.toml");
 
-        const u32 camera_height{2};
+        const f64 camera_height{0.4};
         const f64 camera_increment{0};
         const math::Vec2 player{1, 7};
         const math::Vec2 goal{8, 7};
