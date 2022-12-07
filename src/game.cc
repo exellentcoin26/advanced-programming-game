@@ -92,12 +92,12 @@ void Game::start() {
             // clear the screen
             this->window->clear();
 
-            watch->stop();
-
-            // update and render
+            // update keyboard listener state
             this->keyboard.update();
-            this->state_manager.update(&keyboard);
 
+            // stop watch, update state and reset watch
+            watch->stop();
+            this->state_manager.update(&keyboard);
             watch->reset_and_start();
 
             this->window->display();

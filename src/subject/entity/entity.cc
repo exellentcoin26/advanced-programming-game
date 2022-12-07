@@ -19,4 +19,7 @@ void Entity::update_physics() {
     this->acceleration = {0, 0};
 }
 
-math::Vec2 Entity::project() const { return this->pos + this->velocity + this->acceleration; }
+math::Vec2 Entity::project() const {
+    auto watch = utils::StopWatch::get_instance();
+    return this->pos + this->velocity * watch->get_delta_time();
+}
