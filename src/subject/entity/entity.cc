@@ -13,8 +13,9 @@ void Entity::update_physics() {
     // this->pos += this->velocity; /* hanled by world and collision detection */
 
     // limit velocity
-    this->velocity.ny(std::min(this->velocity.get_x(), this->MAX_MOVEMENT_SPEED));
-    this->velocity.xn(std::min(this->velocity.get_y(), this->MAX_MOVEMENT_SPEED));
+    this->velocity.ny((this->velocity.get_x() > 0) ? std::min(this->velocity.get_x(), this->MAX_MOVEMENT_SPEED)
+                                                   : std::max(this->velocity.get_x(), -this->MAX_MOVEMENT_SPEED));
+    // this->velocity.xn(std::min(this->velocity.get_y(), this->MAX_MOVEMENT_SPEED));
 
     this->acceleration = {0, 0};
 }
