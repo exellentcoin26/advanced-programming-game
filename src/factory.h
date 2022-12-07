@@ -16,7 +16,7 @@ private:
 
 private:
     /// Enum of different drawable types (used for looking up sprites).
-    enum class SubjectType { Player, Tile };
+    enum class SubjectType { Player, Tile, Goal };
 
 public:
     SFMLSubjectFactory(std::shared_ptr<Window> window);

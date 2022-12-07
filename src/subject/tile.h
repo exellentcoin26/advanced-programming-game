@@ -9,10 +9,8 @@ namespace subject {
 
 class Tile : public Subject {
 public:
-    inline Tile() : Subject({-1, -1}, Bounds({0, 0}, {2, 0.1})) {}
+    inline Tile(const Vec2& pos, const Bounds& bounds) : Subject(pos, bounds) {}
     virtual ~Tile() = default;
-
-    inline void update() override {}
 };
 
 } // namespace subject

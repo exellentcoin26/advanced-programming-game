@@ -9,7 +9,7 @@ namespace subject {
 
 class Goal : public Subject {
 public:
-    inline void update() override {}
+    inline Goal(const Vec2& pos, const Bounds& bounds) : Subject(pos, bounds) {}
 };
 
 }; // namespace subject

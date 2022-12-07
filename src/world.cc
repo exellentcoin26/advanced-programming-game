@@ -3,7 +3,7 @@
 #include "subject/tile.h"
 #include "utils/log.h"
 
-World::World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory> factory) {
+World::World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory> factory) : factory(factory) {
     // construct `World` from `level_info`
 
     // create camera
@@ -19,14 +19,13 @@ World::World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory>
     this->subjects[this->player] = std::unique_ptr<Player>(factory->create_player(
         this->camera, level_info.player * scale - Vec2(1.0, 1.0), Bounds({0, 0}, {scale * 0.75, scale * 0.75})));
 
+    // add player to entities
+    this->entities.insert(this->player);
+
     // add goal
     this->goal = this->subjects.size();
     this->subjects[this->goal] = std::unique_ptr<Goal>(factory->create_goal(
         this->camera, level_info.goal * scale - Vec2(1.0, 1.0), Bounds({0, 0}, {scale * 0.6, scale * 0.6})));
-
-    // add player and goal to entities
-    this->entities.insert(this->player);
-    this->entities.insert(this->goal);
 
     // add tiles
     for (const Vec2& tile_pos : level_info.tiles) {
@@ -60,8 +59,13 @@ void World::update() {
 
         // check collision and update position plus internal state of entity
         this->entity_check_collision(e_idx, old_bounds, new_bounds_x, new_bounds_y);
+    }
 
-        e->update();
+    // force update of all subjects
+    for (const auto& [idx, subj] : this->subjects) {
+        (void)idx; // ignore unused warning
+
+        subj->update();
     }
 }
 
