@@ -73,8 +73,12 @@ private:
             if (!exceptions.empty())
                 throw exceptions;
 
-            return {this->size.value(), this->tiles,         this->player.value(),
-                    this->goal.value(), this->camera_height, this->camera_increment};
+            // recalculate camera_height and camera_increment to be proportional to width of level (only n *tiles*
+            // should be visible)
+            const f64 camera_height = this->camera_height * 2.0 / this->size->get_x();
+
+            return {this->size.value(), this->tiles,   this->player.value(),
+                    this->goal.value(), camera_height, this->camera_increment};
         }
 
     private:
@@ -96,7 +100,7 @@ public:
     const std::vector<math::Vec2> tiles{};
     const math::Vec2 player{};
     const math::Vec2 goal{};
-    const u32 camera_height{};
+    const f64 camera_height{};
     const f64 camera_increment{};
 };
 

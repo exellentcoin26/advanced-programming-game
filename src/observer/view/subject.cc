@@ -27,23 +27,21 @@ void SubjectViewSFML::notify(const subject::Subject& source, ObserverEvent event
 
 void SubjectViewSFML::render(const math::Vec2& pos, const Camera& cam) {
     // project `pos` to camera coordinate system
-    const auto& cam_coord_pos = cam.project(pos);
+    const auto cam_coord_pos = cam.project(pos);
 
     if (!cam_coord_pos.has_value())
         return;
 
     // calculate scale factor
-    // Note: This uses the fact that the camera's width is [-1, 1].
-    const u32 max_window_size = std::max(this->window->getSize().x, this->window->getSize().y);
-    const u32 level_x = std::round(max_window_size * (cam.get_width() / std::max(cam.get_width(), cam.get_height())));
-    const f64 scale = static_cast<f64>(level_x) / static_cast<f64>(cam.get_width());
+    // Note: Only keeps the camera height within view, does not use level- or window width.
+    const f64 scale = this->window->getSize().y / cam.get_height();
 
     math::Vec2 render_pos = cam_coord_pos.value() * scale;
     render_pos.xn(this->window->getSize().y - render_pos.get_y());
 
     auto sprite = *this->sprite;
     sprite.setPosition(render_pos.get_x(), render_pos.get_y());
-    sprite.scale(20, 20);
+    sprite.scale(30, 30);
 
     this->window->draw(sprite);
 
