@@ -34,9 +34,9 @@ LevelInfo level::load_level_from_file(std::string_view filepath) {
     //        Parse
     // ===================
 
-    const std::string_view level_map{opt_level_map.value()};
+    const std::string level_map{opt_level_map.value()};
 
-    std::stringstream level_map_stream{std::string(level_map)};
+    std::stringstream level_map_stream{level_map};
 
     u32 map_width{0};
     u32 map_height{0};

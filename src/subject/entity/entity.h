@@ -11,7 +11,7 @@ namespace entity {
 
 class Entity : public Subject {
 protected:
-    const f64 MAX_MOVEMENT_SPEED{0.2f};
+    const f64 MAX_MOVEMENT_SPEED{1.0f};
     const f64 DRAG_FORCE{0.1f};
 
 public:

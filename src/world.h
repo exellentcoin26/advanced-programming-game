@@ -37,8 +37,8 @@ private:
     using Vec2 = math::Vec2;
 
 private:
-    const f64 GRAVITY{1.1f};
-    const f64 MOVEMENT_FORCE{0.1f};
+    const f64 GRAVITY{1.0f};
+    const f64 MOVEMENT_FORCE{4.0f};
     const f64 JUMP_FORCE{1.0f};
 
 public:

@@ -29,7 +29,7 @@ public:
     /// Returns wether `pos` is lower than the current view of the camera.
     constexpr bool is_out_of_view_bottom(const math::Vec2& pos) const { return pos.get_y() < this->offset; }
 
-    /// Returns wether `pos` is within the camera view.
+    /// Returns wether `pos` is within the camera view (only bottom and top, not sides).
     inline bool is_out_of_view(const math::Vec2& pos) const {
         return pos.get_y() + 1 < this->offset || pos.get_y() + 1 > this->offset + this->height;
     }
