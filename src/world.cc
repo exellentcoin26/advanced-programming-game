@@ -67,6 +67,10 @@ void World::update() {
 
         subj->update();
     }
+
+    // updated camera and track player
+    this->camera->update(this->subjects.at(this->player)->get_position(),
+                         this->subjects.at(this->player)->get_rel_bounds().get_size().get_y());
 }
 
 void World::move_player(const std::set<Input>& input) {
