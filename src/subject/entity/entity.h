@@ -12,7 +12,7 @@ namespace entity {
 class Entity : public Subject {
 protected:
     const f64 MAX_MOVEMENT_SPEED{1.0f};
-    const f64 DRAG_FORCE{0.1f};
+    const f64 DRAG_FORCE{3.0f};
 
 public:
     Entity() = default;

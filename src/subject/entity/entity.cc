@@ -9,6 +9,10 @@ void Entity::apply_force(const Vec2& f) { this->acceleration += f; }
 void Entity::update_physics() {
     auto watch = utils::StopWatch::get_instance();
 
+    // add some drag force
+    if (this->velocity.get_x() != 0 && this->acceleration.get_x() == 0)
+        this->apply_force({(this->velocity.get_x() > 0) ? -DRAG_FORCE : DRAG_FORCE, 0});
+
     this->velocity += this->acceleration * watch->get_delta_time();
     // this->pos += this->velocity; /* hanled by world and collision detection */
 
