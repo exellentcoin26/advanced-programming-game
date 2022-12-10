@@ -55,11 +55,21 @@ SFMLSubjectFactory::SFMLSubjectFactory(std::shared_ptr<Window> window) : window(
 
 subject::Subject* SFMLSubjectFactory::create_subject(std::shared_ptr<Camera> cam, const Vec2& pos,
                                                      const Bounds& bounds) const {
+    // avoid warinings
+    (void)cam;
+    (void)pos;
+    (void)bounds;
+
     return nullptr;
 }
 
 subject::entity::Entity* SFMLSubjectFactory::create_entity(std::shared_ptr<Camera> cam, const Vec2& pos,
                                                            const Bounds& bounds) const {
+    // avoid warinings
+    (void)cam;
+    (void)pos;
+    (void)bounds;
+
     return nullptr;
 }
 
