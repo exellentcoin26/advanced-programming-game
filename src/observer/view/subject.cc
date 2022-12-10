@@ -28,7 +28,7 @@ void SubjectViewSFML::notify(const subject::Subject& source, ObserverEvent event
 
 void SubjectViewSFML::render(const math::Vec2& pos, const Camera& cam, const math::Vec2& size) {
     // project `pos` to camera coordinate system
-    const auto cam_coord_pos = cam.project(pos);
+    const auto cam_coord_pos = cam.project(pos, size.get_y());
 
     if (!cam_coord_pos.has_value())
         return;
@@ -45,7 +45,6 @@ void SubjectViewSFML::render(const math::Vec2& pos, const Camera& cam, const mat
     sprite.setScale(
         sf::Vector2f(size.get_x() / sprite.getTextureRect().width, size.get_y() / sprite.getTextureRect().height));
     sprite.scale(sf::Vector2f(scale, scale));
-    // sprite.scale(30, 30);
 
     this->window->draw(sprite);
 
