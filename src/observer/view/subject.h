@@ -27,7 +27,7 @@ public:
 
     void notify(const subject::Subject& source, ObserverEvent event) override;
 
-    void render(const math::Vec2& pos, const Camera& cam);
+    void render(const math::Vec2& pos, const Camera& cam, const math::Vec2& size);
 
 private:
     std::shared_ptr<Window> window{};

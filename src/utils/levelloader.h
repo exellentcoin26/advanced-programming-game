@@ -73,12 +73,21 @@ private:
             if (!exceptions.empty())
                 throw exceptions;
 
+            // invert all locations
+            const math::Vec2 goal = math::Vec2(this->goal->get_x(), this->size->get_y() - this->goal->get_y() - 1);
+            const math::Vec2 player =
+                math::Vec2(this->player->get_x(), this->size->get_y() - this->player->get_y() - 1);
+
+            std::vector<math::Vec2> tiles(this->tiles.size());
+            for (u32 i = 0; i < tiles.size(); ++i) {
+                tiles[i] = math::Vec2(this->tiles[i].get_x(), this->size->get_y() - this->tiles[i].get_y() - 1);
+            }
+
             // recalculate camera_height and camera_increment to be proportional to width of level (only n *tiles*
             // should be visible)
             const f64 camera_height = this->camera_height * 2.0 / this->size->get_x();
 
-            return {this->size.value(), this->tiles,   this->player.value(),
-                    this->goal.value(), camera_height, this->camera_increment};
+            return {this->size.value(), tiles, player, goal, camera_height, this->camera_increment};
         }
 
     private:

@@ -15,8 +15,9 @@ void SubjectViewSFML::notify(const subject::Subject& source, ObserverEvent event
         // render player using the necessary information
         const Camera& cam = source.get_camera();
         const math::Vec2& pos = source.get_position();
+        const math::Vec2& size = source.get_rel_bounds().get_size();
 
-        this->render(pos, cam);
+        this->render(pos, cam, size);
 
         break;
     }
@@ -25,7 +26,7 @@ void SubjectViewSFML::notify(const subject::Subject& source, ObserverEvent event
     }
 }
 
-void SubjectViewSFML::render(const math::Vec2& pos, const Camera& cam) {
+void SubjectViewSFML::render(const math::Vec2& pos, const Camera& cam, const math::Vec2& size) {
     // project `pos` to camera coordinate system
     const auto cam_coord_pos = cam.project(pos);
 
@@ -41,7 +42,10 @@ void SubjectViewSFML::render(const math::Vec2& pos, const Camera& cam) {
 
     auto sprite = *this->sprite;
     sprite.setPosition(render_pos.get_x(), render_pos.get_y());
-    sprite.scale(30, 30);
+    sprite.setScale(
+        sf::Vector2f(size.get_x() / sprite.getTextureRect().width, size.get_y() / sprite.getTextureRect().height));
+    sprite.scale(sf::Vector2f(scale, scale));
+    // sprite.scale(30, 30);
 
     this->window->draw(sprite);
 
