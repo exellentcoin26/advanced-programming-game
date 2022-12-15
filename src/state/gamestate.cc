@@ -19,22 +19,30 @@ LevelState::LevelState(std::shared_ptr<Window> window)
 
 void state::LevelState::update(Keyboard* keyboard) {
     std::optional<std::set<Input>> input{};
+
     if (keyboard->is_key_down(Keyboard::Key::A)) {
         if (!input.has_value())
             input = std::set<Input>{};
+
         input->insert(Input::Left);
-    } else if (keyboard->is_key_down(Keyboard::Key::D)) {
+    }
+    if (keyboard->is_key_down(Keyboard::Key::D)) {
         if (!input.has_value())
             input = std::set<Input>{};
+
         input->insert(Input::Right);
-    } else if (keyboard->is_key_pressed(Keyboard::Key::Space)) {
+    }
+    if (keyboard->is_key_pressed(Keyboard::Key::Space)) {
         if (!input.has_value())
             input = std::set<Input>{};
+
         input->insert(Input::Jump);
     }
 
     if (input.has_value())
+
         this->world.move_player(input.value());
+
     this->world.update();
 }
 
