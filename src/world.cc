@@ -58,8 +58,21 @@ void World::update() {
         const Bounds new_bounds_y{projected_pos_y, old_bounds.get_size()};
 
         // check collision and update position plus internal state of entity
-        this->entity_check_collision(e_idx, old_bounds, new_bounds_x, new_bounds_y);
+        this->entity_check_collision_and_update_pos(e_idx, old_bounds, new_bounds_x, new_bounds_y);
     }
+
+    // Update the `ColliderInfo` for the player, by composing a vector of all collidable bounds.
+    std::vector<Bounds> bounds{};
+    for (const auto& [s_idx, s] : this->subjects) {
+        if (this->entities.find(s_idx) != this->entities.end() || s_idx == this->goal)
+            // ignore other entities for collision
+            continue;
+
+        bounds.push_back(s->get_abs_bounds());
+    }
+
+    Player* player = static_cast<Player*>(&*this->subjects.at(this->player));
+    player->check_jump_collision(std::move(bounds));
 
     // force update of all subjects
     for (const auto& [idx, subj] : this->subjects) {
@@ -91,23 +104,22 @@ void World::move_player(const std::set<Input>& input) {
             break;
 
         case Input::Jump:
-            if (player->get_collision_info().down) {
-                LOG(Debug) << "Jump!\n";
-
-                player->apply_force(Vec2{0, JUMP_FORCE});
-
-            } else if (player->get_collision_info().is_wall_colliding()) {
+            if (player->get_jump_collider().can_wall_jump()) {
                 LOG(Debug) << "Wall Jump!\n";
 
-                player->apply_force(Vec2{(player->get_collision_info().left) ? JUMP_FORCE : -JUMP_FORCE, JUMP_FORCE});
+                player->apply_force({player->get_jump_collider().left ? JUMP_FORCE : -JUMP_FORCE, JUMP_FORCE});
+            } else if (player->get_jump_collider().can_jump()) {
+                LOG(Debug) << "Regular Jump!\n";
+
+                player->apply_force({0, JUMP_FORCE});
             }
             break;
         }
     }
 }
 
-void World::entity_check_collision(usize e_idx, const Bounds& old_bounds, const Bounds& new_bounds_x,
-                                   const Bounds& new_bounds_y) {
+void World::entity_check_collision_and_update_pos(usize e_idx, const Bounds& old_bounds, const Bounds& new_bounds_x,
+                                                  const Bounds& new_bounds_y) {
     Vec2 new_pos{new_bounds_x.get_position().get_x(), new_bounds_y.get_position().get_y()};
     Entity* e = static_cast<Entity*>(&*this->subjects.at(e_idx));
 

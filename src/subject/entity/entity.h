@@ -9,6 +9,23 @@ namespace subject {
 
 namespace entity {
 
+struct CollideInfo {
+    /// Collision at the top of the bound.
+    bool up;
+    /// Collision at the bottom of the bound.
+    bool down;
+    /// Collision at the left of the bound.
+    bool left;
+    /// Collision at the right of the bound.
+    bool right;
+
+    /// Collides at left or right and bottom.
+    inline bool can_wall_jump() const { return this->left || this->right; }
+
+    /// Returns whether the player is grounded.
+    inline bool can_jump() const { return this->down; }
+};
+
 class Entity : public Subject {
 protected:
     const f64 MAX_MOVEMENT_SPEED{1.0f};
@@ -28,9 +45,9 @@ public:
     /// Returns the new position if the forces and velocity would be applied.
     virtual Vec2 project() const;
 
-    constexpr const Vec2& get_velocity() const { return this->velocity; }
-    constexpr Vec2& get_mut_velocity() { return this->velocity; }
-    constexpr void set_velocity(const Vec2& vel) { this->velocity = vel; }
+    inline const Vec2& get_velocity() const { return this->velocity; }
+    inline Vec2& get_mut_velocity() { return this->velocity; }
+    inline void set_velocity(const Vec2& vel) { this->velocity = vel; }
 
 protected:
     Vec2 acceleration{};
@@ -38,15 +55,18 @@ protected:
 };
 
 class Player : public Entity {
+private:
 public:
     inline Player(const Vec2& pos, const Bounds& bounds) : Entity(pos, bounds) {}
     ~Player() = default;
 
-    constexpr Bounds::CollideInfo get_collision_info() const { return this->wall_collider; }
-    Bounds::CollideInfo& get_mut_collision_info() { return this->wall_collider; }
+    /// Checks if the player can jump after colliding with this object.
+    void check_jump_collision(const std::vector<Bounds>& others);
+
+    const CollideInfo& get_jump_collider() const { return this->jump_collider; }
 
 private:
-    Bounds::CollideInfo wall_collider{};
+    CollideInfo jump_collider{};
 };
 
 } // namespace entity
