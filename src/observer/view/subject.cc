@@ -10,7 +10,7 @@ SubjectViewSFML::SubjectViewSFML(std::shared_ptr<Window> window, std::shared_ptr
 void SubjectViewSFML::notify(const subject::Subject& source, ObserverEvent event) {
     switch (event) {
     case ObserverEvent::PositionChange: {
-        LOG(Debug) << "Position change event called\n";
+        // LOG(Debug) << "Position change event called\n";
 
         // render player using the necessary information
         const Camera& cam = source.get_camera();
@@ -48,5 +48,5 @@ void SubjectViewSFML::render(const math::Vec2& pos, const Camera& cam, const mat
 
     this->window->draw(sprite);
 
-    LOG(Debug) << "Subject rendered\n";
+    // LOG(Debug) << "Subject rendered\n";
 }

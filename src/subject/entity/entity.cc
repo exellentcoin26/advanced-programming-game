@@ -11,7 +11,7 @@ void Entity::update_physics() {
 
     // add some drag force
     if (this->velocity.get_x() != 0 && this->acceleration.get_x() == 0)
-        this->apply_force({(this->velocity.get_x() > 0) ? -DRAG_FORCE : DRAG_FORCE, 0});
+        this->apply_force({DRAG_FORCE * -this->velocity.get_x() * 3, 0});
 
     this->velocity += this->acceleration * watch->get_delta_time();
     // this->pos += this->velocity; /* hanled by world and collision detection */
