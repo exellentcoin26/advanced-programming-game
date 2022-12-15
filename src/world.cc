@@ -3,6 +3,8 @@
 #include "subject/tile.h"
 #include "utils/log.h"
 
+#include <iostream>
+
 World::World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory> factory) : factory(factory) {
     // construct `World` from `level_info`
 
@@ -36,6 +38,11 @@ World::World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory>
 
 void World::update() {
     // LOG(Debug) << "Update\n";
+
+    if (this->finished) {
+        std::cout << "Finished!\n";
+        return;
+    }
 
     // update physics for all entities
     for (const usize e_idx : this->entities) {
@@ -84,6 +91,9 @@ void World::update() {
     // updated camera and track player
     this->camera->update(this->subjects.at(this->player)->get_position(),
                          this->subjects.at(this->player)->get_rel_bounds().get_size().get_y());
+
+    // check whether the level is completed
+    this->check_finish();
 }
 
 void World::move_player(const std::set<Input>& input) {
@@ -153,4 +163,12 @@ void World::entity_check_collision_and_update_pos(usize e_idx, const Bounds& old
     }
 
     e->set_position(new_pos);
+}
+
+void World::check_finish() {
+    const Bounds player_bounds = this->subjects.at(this->player)->get_abs_bounds();
+    const Bounds goal_bounds = this->subjects.at(this->goal)->get_abs_bounds();
+
+    if (player_bounds.collides(goal_bounds))
+        this->finished = true;
 }
