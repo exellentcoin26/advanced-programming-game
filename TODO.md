@@ -31,14 +31,16 @@
 - [ ] Logic library:
 
   - [ ] Physics
-  - [ ] Math library
+    - [ ] Player jump mechanics
+        - [ ] Extended bounding box collision detection
+  - [x] Math library
   - [x] Entity design
     - [x] Decide how to handle collision
     - [x] Player
       - [x] Movement controller
   - [x] Stopwatch
   - [x] World
-  - [ ] Camera (Only positions, not rendering)
+  - [x] Camera (Only positions, not rendering)
 
 - [ ] View
   - [x] Implement Game class (main program)

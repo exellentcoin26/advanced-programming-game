@@ -3,6 +3,8 @@
 #include "subject/tile.h"
 #include "utils/log.h"
 
+#include <iostream>
+
 World::World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory> factory) : factory(factory) {
     // construct `World` from `level_info`
 
@@ -37,12 +39,17 @@ World::World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory>
 void World::update() {
     // LOG(Debug) << "Update\n";
 
+    if (this->finished) {
+        std::cout << "Finished!\n";
+        return;
+    }
+
     // update physics for all entities
     for (const usize e_idx : this->entities) {
         Entity* e = static_cast<Entity*>(&*this->subjects.at(e_idx));
 
         // apply gravity to entity
-        e->apply_force(Vec2{0, -GRAVITY});
+        e->apply_force(Vec2(0, -GRAVITY));
 
         // update internal physics state of entity
         e->update_physics();
@@ -58,8 +65,21 @@ void World::update() {
         const Bounds new_bounds_y{projected_pos_y, old_bounds.get_size()};
 
         // check collision and update position plus internal state of entity
-        this->entity_check_collision(e_idx, old_bounds, new_bounds_x, new_bounds_y);
+        this->entity_check_collision_and_update_pos(e_idx, old_bounds, new_bounds_x, new_bounds_y);
     }
+
+    // Update the `ColliderInfo` for the player, by composing a vector of all collidable bounds.
+    std::vector<Bounds> bounds{};
+    for (const auto& [s_idx, s] : this->subjects) {
+        if (this->entities.find(s_idx) != this->entities.end() || s_idx == this->goal)
+            // ignore other entities for collision
+            continue;
+
+        bounds.push_back(s->get_abs_bounds());
+    }
+
+    Player* player = static_cast<Player*>(&*this->subjects.at(this->player));
+    player->check_jump_collision(std::move(bounds));
 
     // force update of all subjects
     for (const auto& [idx, subj] : this->subjects) {
@@ -67,6 +87,13 @@ void World::update() {
 
         subj->update();
     }
+
+    // updated camera and track player
+    this->camera->update(this->subjects.at(this->player)->get_position(),
+                         this->subjects.at(this->player)->get_rel_bounds().get_size().get_y());
+
+    // check whether the level is completed
+    this->check_finish();
 }
 
 void World::move_player(const std::set<Input>& input) {
@@ -77,33 +104,35 @@ void World::move_player(const std::set<Input>& input) {
         case Input::Left:
             LOG(Debug) << "Move Left\n";
 
-            player->apply_force(Vec2{-MOVEMENT_FORCE, 0});
+            player->apply_force(Vec2(-MOVEMENT_FORCE, 0));
             break;
 
         case Input::Right:
             LOG(Debug) << "Move Right\n";
 
-            player->apply_force(Vec2{MOVEMENT_FORCE, 0});
+            player->apply_force(Vec2(MOVEMENT_FORCE, 0));
             break;
 
         case Input::Jump:
-            if (player->get_collision_info().down) {
-                LOG(Debug) << "Jump!\n";
-
-                player->apply_force(Vec2{0, JUMP_FORCE});
-
-            } else if (player->get_collision_info().is_wall_colliding()) {
+            if (player->get_jump_collider().can_wall_jump()) {
                 LOG(Debug) << "Wall Jump!\n";
 
-                player->apply_force(Vec2{(player->get_collision_info().left) ? JUMP_FORCE : -JUMP_FORCE, JUMP_FORCE});
+                player->get_mut_velocity() = {player->get_velocity().get_x(), 0};
+                player->apply_impulse(
+                    {(player->get_jump_collider().left ? JUMP_FORCE : -JUMP_FORCE) * 0.8, JUMP_FORCE});
+            } else if (player->get_jump_collider().can_jump()) {
+                LOG(Debug) << "Regular Jump!\n";
+
+                player->get_mut_velocity() = {player->get_velocity().get_x(), 0};
+                player->apply_impulse(Vec2(0, JUMP_FORCE));
             }
             break;
         }
     }
 }
 
-void World::entity_check_collision(usize e_idx, const Bounds& old_bounds, const Bounds& new_bounds_x,
-                                   const Bounds& new_bounds_y) {
+void World::entity_check_collision_and_update_pos(usize e_idx, const Bounds& old_bounds, const Bounds& new_bounds_x,
+                                                  const Bounds& new_bounds_y) {
     Vec2 new_pos{new_bounds_x.get_position().get_x(), new_bounds_y.get_position().get_y()};
     Entity* e = static_cast<Entity*>(&*this->subjects.at(e_idx));
 
@@ -137,4 +166,12 @@ void World::entity_check_collision(usize e_idx, const Bounds& old_bounds, const 
     }
 
     e->set_position(new_pos);
+}
+
+void World::check_finish() {
+    const Bounds player_bounds = this->subjects.at(this->player)->get_abs_bounds();
+    const Bounds goal_bounds = this->subjects.at(this->goal)->get_abs_bounds();
+
+    if (player_bounds.collides(goal_bounds))
+        this->finished = true;
 }

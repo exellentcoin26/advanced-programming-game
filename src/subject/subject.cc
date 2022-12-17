@@ -12,9 +12,6 @@ bool Bounds::collides(const Bounds& rhs) const {
                         this->get_position().get_y() < rhs.get_position().get_y() + rhs.get_size().get_y() &&
                         this->get_position().get_y() + this->get_size().get_y() > rhs.get_position().get_y();
 
-    if (result)
-        LOG(Debug) << "Collides\n";
-
     return result;
 }
 

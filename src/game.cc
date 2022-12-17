@@ -1,7 +1,7 @@
 #include "game.h"
 
 Game::GameBuilder::GameBuilder(WindowStyle style, std::pair<u32, u32> size, const std::string& title, bool vsync)
-    : style(style), size(std::move(size)), title(std::move(title)), vsync(vsync) {}
+    : style(style), size(std::move(size)), title(title), vsync(vsync) {}
 
 Game::GameBuilder& Game::GameBuilder::set_fps(u32 fps) {
     if (!this->vsync)
@@ -74,6 +74,9 @@ void Game::start() {
         last_time = now;
 
         if (delta >= 1) {
+            watch->stop();
+            watch->reset_and_start();
+
             ++frames;
             --delta;
 
@@ -96,9 +99,7 @@ void Game::start() {
             this->keyboard.update();
 
             // stop watch, update state and reset watch
-            watch->stop();
             this->state_manager.update(&keyboard);
-            watch->reset_and_start();
 
             this->window->display();
 

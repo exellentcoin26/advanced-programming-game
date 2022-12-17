@@ -37,9 +37,9 @@ private:
     using Vec2 = math::Vec2;
 
 private:
-    const f64 GRAVITY{1.0f};
-    const f64 MOVEMENT_FORCE{4.0f};
-    const f64 JUMP_FORCE{1.0f};
+    const f64 GRAVITY{3.5f};
+    const f64 MOVEMENT_FORCE{5.0f};
+    const f64 JUMP_FORCE{2.0f};
 
 public:
     World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory> factory);
@@ -52,9 +52,12 @@ public:
     void move_player(const std::set<Input>& input);
 
 private:
-    /// Checks collision with all entities per axis and updates the internal state of the entity
-    void entity_check_collision(usize e_idx, const Bounds& old_bounds, const Bounds& new_bounds_x,
-                                const Bounds& new_bounds_y);
+    /// Checks collision with all entities per axis and updates the internal state of the entity.
+    void entity_check_collision_and_update_pos(usize e_idx, const Bounds& old_bounds, const Bounds& new_bounds_x,
+                                               const Bounds& new_bounds_y);
+
+    /// Checks whether the player has reached the goal.
+    void check_finish();
 
 private:
     /// camera that defines the view of the world
@@ -70,6 +73,8 @@ private:
     usize player{};
     /// pointer to goal in `subjects` map
     usize goal{};
+
+    bool finished{false};
 
     /// contiains textures
     std::shared_ptr<SubjectFactory> factory;

@@ -18,13 +18,13 @@ private:
     using Duration = std::chrono::duration<double>;
 
 public:
-    /// Creates a new stopwatch instance (Should not be called by user)
-    inline StopWatch() : start_time(SystemClock::now()) {}
+    StopWatch(const StopWatch&) = delete;
+    void operator=(const StopWatch&) = delete;
 
     /// Returns the singleton `Stopwatch` instance.
     inline static std::shared_ptr<StopWatch> get_instance() {
         if (!instance) {
-            instance = std::make_shared<StopWatch>();
+            instance = std::shared_ptr<StopWatch>(new StopWatch());
         }
         return instance;
     }
@@ -36,12 +36,15 @@ public:
     }
 
     /// Returns the delta time (in seconds) between last stop and reset/start call
-    inline f64 get_delta_time() { return this->delta_time; }
+    inline f64 get_delta_time() const { return this->delta_time; }
 
     /// Resets the stopwatch
     inline void reset_and_start() { this->start_time = SystemClock::now(); }
 
 private:
+    /// Creates a new stopwatch instance (Should not be called by user)
+    inline StopWatch() : start_time(SystemClock::now()) {}
+
     static std::shared_ptr<StopWatch> instance;
 
     TimePoint start_time;

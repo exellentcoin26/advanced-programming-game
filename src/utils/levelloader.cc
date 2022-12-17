@@ -24,8 +24,8 @@ LevelInfo level::load_level_from_file(std::string_view filepath) {
 
     //      Camera
 
-    const u32 camera_height = config["camera"]["height"].value_or(2);
-    const f64 camera_increment = config["camera"]["increment"].value_or(0);
+    const u32 camera_height = config["camera"]["height"].value_or<u32>(2);
+    const f64 camera_increment = config["camera"]["increment"].value_or<f64>(0);
 
     if (!exceptions.empty())
         throw exceptions;
