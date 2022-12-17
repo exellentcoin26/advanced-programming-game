@@ -37,9 +37,9 @@ private:
     using Vec2 = math::Vec2;
 
 private:
-    const f64 GRAVITY{3.0f};
-    const f64 MOVEMENT_FORCE{4.0f};
-    const f64 JUMP_FORCE{120.0f};
+    const f64 GRAVITY{3.5f};
+    const f64 MOVEMENT_FORCE{5.0f};
+    const f64 JUMP_FORCE{2.0f};
 
 public:
     World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory> factory);

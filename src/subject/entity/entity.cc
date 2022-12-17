@@ -1,33 +1,40 @@
 #include "entity.h"
 
-#include "utils/log.h"
 #include "utils/stopwatch.h"
 
 using namespace subject::entity;
 
 void Entity::apply_force(const Vec2& f) { this->acceleration += f; }
 
+void Entity::apply_impulse(const Vec2& f) {
+    auto watch = utils::StopWatch::get_instance();
+    this->acceleration += f / watch->get_delta_time();
+}
+
 void Entity::update_physics() {
     auto watch = utils::StopWatch::get_instance();
 
     // add some drag force
+    // (website)[https://forum.unity.com/threads/physics-drag-formula.252406]
     if (this->velocity.get_x() != 0 && this->acceleration.get_x() == 0)
-        this->apply_force({DRAG_FORCE * -this->velocity.get_x() * 3, 0});
+        this->velocity.ny(this->velocity.get_x() * (1 - DRAG_FORCE * watch->get_delta_time()));
 
     this->velocity += this->acceleration * watch->get_delta_time();
-    // this->pos += this->velocity; /* hanled by world and collision detection */
+    // this->pos += this->velocity; /* handled by world and collision detection */
 
     // limit velocity
     this->velocity.ny((this->velocity.get_x() > 0) ? std::min(this->velocity.get_x(), this->MAX_MOVEMENT_SPEED)
                                                    : std::max(this->velocity.get_x(), -this->MAX_MOVEMENT_SPEED));
     // this->velocity.xn(std::min(this->velocity.get_y(), this->MAX_MOVEMENT_SPEED));
 
+    this->old_acceleration = this->acceleration;
     this->acceleration = {0, 0};
 }
 
 math::Vec2 Entity::project() const {
     auto watch = utils::StopWatch::get_instance();
-    return this->pos + this->velocity * watch->get_delta_time();
+    return this->pos + (this->velocity * watch->get_delta_time()) +
+           (this->old_acceleration * std::pow(watch->get_delta_time(), 2) * 0.5);
 }
 
 void Player::check_jump_collision(const std::vector<Bounds>& others) {

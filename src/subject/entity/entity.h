@@ -28,16 +28,19 @@ struct CollideInfo {
 
 class Entity : public Subject {
 protected:
-    const f64 MAX_MOVEMENT_SPEED{1.0f};
-    const f64 DRAG_FORCE{3.0f};
+    const f64 MAX_MOVEMENT_SPEED{4.0f};
+    const f64 DRAG_FORCE{9.0f};
 
 public:
     Entity() = default;
     inline Entity(const Vec2& pos, const Bounds& bounds) : Subject(pos, bounds) {}
     virtual ~Entity() = default;
 
-    /// Apllies force to acceleration of entity.
+    /// Apllies force (applied every frame) to acceleration of entity by depending on delta time.
     virtual void apply_force(const Vec2& f);
+
+    /// Applies impulse (applied once in a single frame) to acceleration of entity by ignoring delta time.
+    virtual void apply_impulse(const Vec2& i);
 
     /// Update the internal state of the physics of the entity.
     void update_physics();
@@ -52,6 +55,10 @@ public:
 protected:
     Vec2 acceleration{};
     Vec2 velocity{};
+
+private:
+    /// Helper variable so that `project` can be called after `update_physics`.
+    Vec2 old_acceleration{};
 };
 
 class Player : public Entity {

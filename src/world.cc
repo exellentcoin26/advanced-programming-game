@@ -49,7 +49,7 @@ void World::update() {
         Entity* e = static_cast<Entity*>(&*this->subjects.at(e_idx));
 
         // apply gravity to entity
-        e->apply_force(Vec2{0, -GRAVITY});
+        e->apply_force(Vec2(0, -GRAVITY));
 
         // update internal physics state of entity
         e->update_physics();
@@ -104,24 +104,27 @@ void World::move_player(const std::set<Input>& input) {
         case Input::Left:
             LOG(Debug) << "Move Left\n";
 
-            player->apply_force(Vec2{-MOVEMENT_FORCE, 0});
+            player->apply_force(Vec2(-MOVEMENT_FORCE, 0));
             break;
 
         case Input::Right:
             LOG(Debug) << "Move Right\n";
 
-            player->apply_force(Vec2{MOVEMENT_FORCE, 0});
+            player->apply_force(Vec2(MOVEMENT_FORCE, 0));
             break;
 
         case Input::Jump:
             if (player->get_jump_collider().can_wall_jump()) {
                 LOG(Debug) << "Wall Jump!\n";
 
-                player->apply_force({player->get_jump_collider().left ? JUMP_FORCE : -JUMP_FORCE, JUMP_FORCE});
+                player->get_mut_velocity() = {player->get_velocity().get_x(), 0};
+                player->apply_impulse(
+                    {(player->get_jump_collider().left ? JUMP_FORCE : -JUMP_FORCE) * 0.8, JUMP_FORCE});
             } else if (player->get_jump_collider().can_jump()) {
                 LOG(Debug) << "Regular Jump!\n";
 
-                player->apply_force({0, JUMP_FORCE});
+                player->get_mut_velocity() = {player->get_velocity().get_x(), 0};
+                player->apply_impulse(Vec2(0, JUMP_FORCE));
             }
             break;
         }
