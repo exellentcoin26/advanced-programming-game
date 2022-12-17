@@ -1,7 +1,7 @@
 #include "doctest/doctest.h"
 
-#include "../src/utils/levelloader.h"
-#include "../src/utils/types.h"
+#include "utils/levelloader.h"
+#include "utils/types.h"
 
 TEST_SUITE("levelloader") {
     TEST_CASE("level_0") {
@@ -16,6 +16,7 @@ TEST_SUITE("levelloader") {
                                             {9, 8}, {0, 7}, {9, 7}, {0, 6}, {9, 6}, {0, 5}, {9, 5}, {0, 4}, {9, 4},
                                             {0, 3}, {9, 3}, {0, 2}, {9, 2}, {0, 1}, {9, 1}, {0, 0}, {1, 0}, {2, 0},
                                             {3, 0}, {4, 0}, {5, 0}, {6, 0}, {7, 0}, {8, 0}, {9, 0}};
+        const std::string name{"test_0"};
 
         CHECK_EQ(camera_height, level_info.camera_height);
         CHECK_EQ(camera_increment, level_info.camera_increment);
@@ -23,5 +24,6 @@ TEST_SUITE("levelloader") {
         CHECK_EQ(goal, level_info.goal);
         CHECK_EQ(size, level_info.size);
         CHECK_EQ(tiles, level_info.tiles);
+        CHECK_EQ(name, level_info.name);
     }
 }

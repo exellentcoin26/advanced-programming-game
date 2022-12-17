@@ -17,10 +17,13 @@ LevelInfo level::load_level_from_file(std::string_view filepath) {
 
     //      Level
 
+    const auto opt_level_name = config["name"].value<std::string>();
     const auto opt_level_map = config["level"]["map"].value<std::string_view>();
 
+    if (!opt_level_name.has_value())
+        exceptions.emplace_back("`name` value not set");
     if (!opt_level_map.has_value())
-        exceptions.emplace_back("`level` value not set");
+        exceptions.emplace_back("`level.map` value not set");
 
     //      Camera
 
@@ -34,6 +37,7 @@ LevelInfo level::load_level_from_file(std::string_view filepath) {
     //        Parse
     // ===================
 
+    const std::string level_name{opt_level_name.value()};
     const std::string level_map{opt_level_map.value()};
 
     std::stringstream level_map_stream{level_map};
@@ -41,7 +45,7 @@ LevelInfo level::load_level_from_file(std::string_view filepath) {
     u32 map_width{0};
     u32 map_height{0};
 
-    auto map_builder = LevelInfo::create(camera_height, camera_increment);
+    auto map_builder = LevelInfo::create(level_name, camera_height, camera_increment);
 
     std::string line;
     while (std::getline(level_map_stream, line, '\n')) {

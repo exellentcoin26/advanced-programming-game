@@ -34,8 +34,8 @@ struct LevelInfo {
 private:
     class LevelInfoBuilder {
     public:
-        inline LevelInfoBuilder(u32 camera_height, f64 camera_increment)
-            : camera_height(camera_height), camera_increment(camera_increment) {}
+        inline LevelInfoBuilder(std::string name, u32 camera_height, f64 camera_increment)
+            : name(std::move(name)), camera_height(camera_height), camera_increment(camera_increment) {}
 
         inline void set_size(const math::Vec2& size) {
             if (this->size.has_value())
@@ -89,10 +89,11 @@ private:
             const f64 camera_height = this->camera_height * scale;
             const f64 camera_increment = this->camera_increment * scale;
 
-            return {this->size.value(), tiles, player, goal, camera_height, camera_increment};
+            return {std::move(this->name), this->size.value(), tiles, player, goal, camera_height, camera_increment};
         }
 
     private:
+        const std::string name{};
         std::optional<math::Vec2> size{};
         std::vector<math::Vec2> tiles{};
         std::optional<math::Vec2> player{};
@@ -102,11 +103,12 @@ private:
     };
 
 public:
-    inline static LevelInfoBuilder create(u32 camera_height, f64 camera_increment) {
-        return {camera_height, camera_increment};
+    inline static LevelInfoBuilder create(std::string name, u32 camera_height, f64 camera_increment) {
+        return {std::move(name), camera_height, camera_increment};
     }
 
 public:
+    const std::string name{};
     const math::Vec2 size{};
     const std::vector<math::Vec2> tiles{};
     const math::Vec2 player{};
