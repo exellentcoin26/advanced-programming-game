@@ -15,7 +15,7 @@ void Entity::update_physics() {
     auto watch = utils::StopWatch::get_instance();
 
     // add some drag force
-    // (website)[https://forum.unity.com/threads/physics-drag-formula.252406]
+    // (source)[https://forum.unity.com/threads/physics-drag-formula.252406]
     if (this->velocity.get_x() != 0 && this->acceleration.get_x() == 0)
         this->velocity.ny(this->velocity.get_x() * (1 - DRAG_FORCE * watch->get_delta_time()));
 
