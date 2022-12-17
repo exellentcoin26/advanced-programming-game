@@ -20,7 +20,7 @@ struct CollideInfo {
     bool right;
 
     /// Collides at left or right and bottom.
-    inline bool can_wall_jump() const { return this->left || this->right; }
+    inline bool can_wall_jump() const { return (this->left || this->right) && !this->down; }
 
     /// Returns whether the player is grounded.
     inline bool can_jump() const { return this->down; }
