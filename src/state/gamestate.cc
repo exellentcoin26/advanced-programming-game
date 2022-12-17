@@ -2,22 +2,18 @@
 
 #include "../utils/log.h"
 
+#include <iostream>
 #include <optional>
 
 using namespace state;
 
-LevelSelectorState::LevelSelectorState(std::shared_ptr<Window> window) : State(window) {}
-
-void LevelSelectorState::update(Keyboard* keyboard) {}
-
-LevelState::LevelState(std::shared_ptr<Window> window)
+GameState::GameState(std::shared_ptr<Window> window)
     : State(window), world([&]() -> World {
-          level::LevelInfo level_info = level::load_level_from_file("tmp.toml");
-
+          level::LevelInfo level_info = level::load_level_from_file("assets/levels/level0.toml");
           return World(level_info, std::make_shared<SFMLSubjectFactory>(window));
       }()) {}
 
-void state::LevelState::update(Keyboard* keyboard) {
+void GameState::update(Keyboard* keyboard) {
     std::optional<std::set<Input>> input{};
 
     if (keyboard->is_key_down(Keyboard::Key::A)) {
@@ -45,12 +41,3 @@ void state::LevelState::update(Keyboard* keyboard) {
 
     this->world.update();
 }
-
-GameState::GameState(std::shared_ptr<Window> window)
-    : State(window),
-      state_manager(StateManager::create_state_manager(GameStateStateType::LevelState)
-                        .insert_state(GameStateStateType::LevelState, new LevelState(window))
-                        .insert_state(GameStateStateType::LevelSelectorState, new LevelSelectorState(window))
-                        .build()) {}
-
-void GameState::update(Keyboard* keyboard) { this->state_manager.update(keyboard); }

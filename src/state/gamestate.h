@@ -13,25 +13,6 @@
 
 namespace state {
 
-class LevelSelectorState : public State {
-public:
-    LevelSelectorState(std::shared_ptr<Window> window);
-    ~LevelSelectorState() = default;
-
-    void update(Keyboard* keyboard) override;
-};
-
-class LevelState : public State {
-public:
-    LevelState(std::shared_ptr<Window> window);
-    ~LevelState() = default;
-
-    void update(Keyboard* keyboard) override;
-
-private:
-    World world;
-};
-
 class GameState : public State {
 private:
     enum class GameStateStateType {
@@ -49,7 +30,7 @@ public:
     void update(Keyboard* keyboard) override;
 
 private:
-    StateManager state_manager;
+    World world;
 };
 
 } // namespace state
