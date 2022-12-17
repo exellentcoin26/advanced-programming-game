@@ -38,7 +38,7 @@ sf::RenderWindow* Game::create_window(u32 width, u32 height, const std::string& 
     auto style = sf::Style::None;
     switch (this->style) {
     case WindowStyle::Windowed:
-        style = sf::Style::Close;
+        style = sf::Style::Default;
         break;
     case WindowStyle::BorderLess:
         style = sf::Style::None;
@@ -86,6 +86,10 @@ void Game::start() {
                 if (event.type == sf::Event::Closed) {
                     quit = true;
                     break;
+                }
+                if (event.type == sf::Event::Resized) {
+                    sf::FloatRect view(0, 0, event.size.width, event.size.height);
+                    window->setView(sf::View(view));
                 }
             }
 
