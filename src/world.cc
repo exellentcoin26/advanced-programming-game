@@ -118,8 +118,7 @@ void World::move_player(const std::set<Input>& input) {
                 LOG(Debug) << "Wall Jump!\n";
 
                 player->get_mut_velocity() = {player->get_velocity().get_x(), 0};
-                player->apply_impulse(
-                    {(player->get_jump_collider().left ? JUMP_FORCE : -JUMP_FORCE) * 0.8, JUMP_FORCE});
+                player->apply_impulse({(player->get_jump_collider().left ? JUMP_FORCE : -JUMP_FORCE), JUMP_FORCE});
             } else if (player->get_jump_collider().can_jump()) {
                 LOG(Debug) << "Regular Jump!\n";
 

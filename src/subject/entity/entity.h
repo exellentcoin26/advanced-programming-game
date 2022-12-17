@@ -28,7 +28,7 @@ struct CollideInfo {
 
 class Entity : public Subject {
 protected:
-    const f64 MAX_MOVEMENT_SPEED{4.0f};
+    const f64 MAX_MOVEMENT_SPEED{1.5f};
     const f64 DRAG_FORCE{9.0f};
 
 public:

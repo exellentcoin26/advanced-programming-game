@@ -38,8 +38,8 @@ private:
 
 private:
     const f64 GRAVITY{3.5f};
-    const f64 MOVEMENT_FORCE{5.0f};
-    const f64 JUMP_FORCE{2.0f};
+    const f64 MOVEMENT_FORCE{7.0f};
+    const f64 JUMP_FORCE{1.8f};
 
 public:
     World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory> factory);
