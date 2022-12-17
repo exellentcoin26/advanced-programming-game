@@ -85,9 +85,11 @@ private:
 
             // recalculate camera_height and camera_increment to be proportional to width of level (only n *tiles*
             // should be visible)
-            const f64 camera_height = this->camera_height * 2.0 / this->size->get_x();
+            const f64 scale = 2.0 / this->size->get_x();
+            const f64 camera_height = this->camera_height * scale;
+            const f64 camera_increment = this->camera_increment * scale;
 
-            return {this->size.value(), tiles, player, goal, camera_height, this->camera_increment};
+            return {this->size.value(), tiles, player, goal, camera_height, camera_increment};
         }
 
     private:
