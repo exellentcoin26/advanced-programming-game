@@ -39,10 +39,8 @@ World::World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory>
 void World::update() {
     // LOG(Debug) << "Update\n";
 
-    if (this->finished) {
-        std::cout << "Finished!\n";
+    if (this->finished)
         return;
-    }
 
     // update physics for all entities
     for (const usize e_idx : this->entities) {
@@ -97,6 +95,9 @@ void World::update() {
 }
 
 void World::move_player(const std::set<Input>& input) {
+    if (this->finished)
+        return;
+
     Player* player = static_cast<Player*>(&*this->subjects.at(this->player));
 
     for (auto move : input) {
@@ -173,4 +174,6 @@ void World::check_finish() {
 
     if (player_bounds.collides(goal_bounds))
         this->finished = true;
+
+    std::cout << "Finished!\n";
 }
