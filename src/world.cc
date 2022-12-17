@@ -39,7 +39,7 @@ World::World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory>
 void World::update() {
     // LOG(Debug) << "Update\n";
 
-    if (this->finished)
+    if (this->finished || this->dead)
         return;
 
     // update physics for all entities
@@ -91,11 +91,11 @@ void World::update() {
                          this->subjects.at(this->player)->get_rel_bounds().get_size().get_y());
 
     // check whether the level is completed
-    this->check_finish();
+    this->check_finish_or_death();
 }
 
 void World::move_player(const std::set<Input>& input) {
-    if (this->finished)
+    if (this->finished || this->dead)
         return;
 
     Player* player = static_cast<Player*>(&*this->subjects.at(this->player));
@@ -168,12 +168,16 @@ void World::entity_check_collision_and_update_pos(usize e_idx, const Bounds& old
     e->set_position(new_pos);
 }
 
-void World::check_finish() {
+void World::check_finish_or_death() {
     const Bounds player_bounds = this->subjects.at(this->player)->get_abs_bounds();
     const Bounds goal_bounds = this->subjects.at(this->goal)->get_abs_bounds();
 
-    if (player_bounds.collides(goal_bounds))
-        this->finished = true;
+    if (this->camera->is_out_of_view_bottom(player_bounds.get_position(), player_bounds.get_size().get_y())) {
+        this->dead = true;
+        std::cout << "Dead!\n";
 
-    std::cout << "Finished!\n";
+    } else if (player_bounds.collides(goal_bounds)) {
+        this->finished = true;
+        std::cout << "Finished!\n";
+    }
 }

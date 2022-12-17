@@ -57,7 +57,7 @@ private:
                                                const Bounds& new_bounds_y);
 
     /// Checks whether the player has reached the goal.
-    void check_finish();
+    void check_finish_or_death();
 
 private:
     /// camera that defines the view of the world
@@ -75,6 +75,7 @@ private:
     usize goal{};
 
     bool finished{false};
+    bool dead{false};
 
     /// contiains textures
     std::shared_ptr<SubjectFactory> factory;
