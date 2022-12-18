@@ -33,6 +33,9 @@ public:
         return this->levels.at(this->current_level);
     }
 
+    /// Returns `{LevelInfo, completed}` of the current level as mutable.
+    inline std::pair<level::LevelInfo, bool>& get_current_level_mut() { return this->levels[this->current_level]; }
+
     /// Returns the index of the current level.
     inline u32 get_current_level_index() const { return this->current_level; }
 

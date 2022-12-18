@@ -12,13 +12,17 @@ GameState::GameState(std::shared_ptr<Window> window, std::shared_ptr<SubjectFact
     : State(window), world([&]() -> World {
           auto resource_manager = ResourceManager::get_instance();
           return World(resource_manager->get_current_level().first, factory);
-      }()), factory(factory) {}
+      }()),
+      factory(factory) {}
 
 void GameState::update(Keyboard* keyboard) {
     // check that the world is completed or failed
     std::pair<bool, bool> completed_or_failed = this->world.completed_or_failed();
     auto resource_manager = ResourceManager::get_instance();
     if (completed_or_failed.first) {
+        // mark level as completed
+        resource_manager->get_current_level_mut().second = true;
+
         // try advance the current level
         bool success = resource_manager->set_current_level(resource_manager->get_current_level_index() + 1);
 

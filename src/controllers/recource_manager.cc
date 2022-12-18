@@ -3,6 +3,7 @@
 #include "utils/log.h"
 
 #include <filesystem>
+#include <map>
 
 std::shared_ptr<ResourceManager> ResourceManager::instance = 0;
 
@@ -13,7 +14,18 @@ void ResourceManager::load_levels_from_dir(std::string_view dir) {
     if (!std::filesystem::is_directory(dir))
         throw level::LevelLoaderException("`dir` is not a valid direcotry");
 
+    // add all entries to entry map, because iterator order is unspecified.
+    std::map<std::filesystem::path, std::filesystem::directory_entry> entries;
     for (const auto& dir_entry : std::filesystem::directory_iterator(dir)) {
+        if (dir_entry.path().extension() != ".toml") {
+            LOG(Warn) << "Non `toml` file in level directory!\n";
+            continue;
+        }
+
+        entries.insert({dir_entry.path(), dir_entry});
+    }
+
+    for (const auto& [_, dir_entry] : entries) {
         if (dir_entry.path().extension() != ".toml") {
             LOG(Warn) << "Non `toml` file in level directory!\n";
             continue;
