@@ -91,8 +91,11 @@ private:
     const u32 fps;
     const bool vsync{};
 
+    std::shared_ptr<SubjectFactory> factory;
+
     StateManager state_manager;
     Keyboard keyboard;
+
 };
 
 #endif // GAME_SRC_GAME_H

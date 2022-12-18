@@ -14,7 +14,7 @@ namespace level {
 
 class LevelLoaderException : public std::exception {
 public:
-    inline LevelLoaderException(const std::string& message) : message(std::move(message)) {}
+    inline LevelLoaderException(std::string message) : message(std::move(message)) {}
 
     inline const char* what() const noexcept override { return message.c_str(); }
 

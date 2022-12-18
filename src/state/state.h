@@ -5,12 +5,12 @@
 
 #include "SFML/Graphics.hpp"
 
-#include "../controllers/keyboard.h"
-#include "../utils/log.h"
+#include "controllers/keyboard.h"
 
 #include <memory>
 #include <stdexcept>
 #include <unordered_map>
+#include <vector>
 
 namespace state {
 

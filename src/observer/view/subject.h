@@ -5,11 +5,11 @@
 
 #include "SFML/Graphics.hpp"
 
-#include "../../math/vec.h"
-#include "../../subject/entity/entity.h"
-#include "../../subject/subject.h"
-#include "../../utils/log.h"
 #include "../observer.h"
+#include "math/vec.h"
+#include "subject/entity/entity.h"
+#include "subject/subject.h"
+#include "utils/log.h"
 
 namespace view {
 

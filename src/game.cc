@@ -1,5 +1,7 @@
 #include "game.h"
 
+#include "controllers/resource_manager.h"
+
 Game::GameBuilder::GameBuilder(WindowStyle style, std::pair<u32, u32> size, const std::string& title, bool vsync)
     : style(style), size(std::move(size)), title(title), vsync(vsync) {}
 
@@ -25,13 +27,17 @@ Game::GameBuilder Game::create_game(WindowStyle style, u32 width, u32 height, co
 }
 
 Game::Game(WindowStyle style, u32 width, u32 height, const std::string& title, u32 fps, bool vsync)
-    : style(style), width(width), height(height),
-      window(std::shared_ptr<Window>(this->create_window(width, height, title))), fps(fps), vsync(vsync),
-      state_manager(StateManager::create_state_manager(StateType::GameState)
-                        .insert_state(StateType::GameState, new GameState(this->window))
-                        .insert_state(StateType::MenuState, new MenuState(this->window))
-                        .insert_state(StateType::OptionsState, new OptionsState(this->window))
-                        .build()),
+    : style(style), width(width), height(height), window(std::shared_ptr<Window>(this->create_window(width, height, title))),
+      fps(fps), vsync(vsync), factory(std::make_shared<SFMLSubjectFactory>(this->window)), state_manager([&]() -> StateManager {
+          auto resource_manager = ResourceManager::get_instance();
+          resource_manager->load_levels_from_dir("assets/levels");
+
+          return StateManager::create_state_manager(StateType::GameState)
+              .insert_state(StateType::GameState, new GameState(this->window, this->factory))
+              .insert_state(StateType::MenuState, new MenuState(this->window))
+              .insert_state(StateType::OptionsState, new OptionsState(this->window))
+              .build();
+      }()),
       keyboard(Keyboard()) {}
 
 sf::RenderWindow* Game::create_window(u32 width, u32 height, const std::string& title) const {

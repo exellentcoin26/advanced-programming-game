@@ -1,19 +1,52 @@
 #include "gamestate.h"
 
-#include "../utils/log.h"
+#include "controllers/resource_manager.h"
+#include "utils/log.h"
 
 #include <iostream>
 #include <optional>
 
 using namespace state;
 
-GameState::GameState(std::shared_ptr<Window> window)
+GameState::GameState(std::shared_ptr<Window> window, std::shared_ptr<SubjectFactory> factory)
     : State(window), world([&]() -> World {
-          level::LevelInfo level_info = level::load_level_from_file("assets/levels/level0.toml");
-          return World(level_info, std::make_shared<SFMLSubjectFactory>(window));
-      }()) {}
+          auto resource_manager = ResourceManager::get_instance();
+          return World(resource_manager->get_current_level().first, factory);
+      }()), factory(factory) {}
 
 void GameState::update(Keyboard* keyboard) {
+    // check that the world is completed or failed
+    std::pair<bool, bool> completed_or_failed = this->world.completed_or_failed();
+    auto resource_manager = ResourceManager::get_instance();
+    if (completed_or_failed.first) {
+        // try advance the current level
+        bool success = resource_manager->set_current_level(resource_manager->get_current_level_index() + 1);
+
+        if (!success) {
+            // find a level that has not been completed yet.
+            const auto levels = resource_manager->get_levels();
+            bool found{false};
+            for (unsigned int i = 0; i < levels.size(); ++i) {
+                if (levels.at(i).second)
+                    continue;
+
+                // set new current level
+                resource_manager->set_current_level(i);
+                found = true;
+                break;
+            }
+
+            if (!found) {
+                // exit game with success
+                std::cout << "All levels completed. Congratulations!\n";
+                exit(0);
+            }
+        }
+
+        // load world with found level
+        this->world = World(resource_manager->get_current_level().first, this->factory);
+    }
+
     std::optional<std::set<Input>> input{};
 
     if (keyboard->is_key_down(Keyboard::Key::A)) {
@@ -36,8 +69,9 @@ void GameState::update(Keyboard* keyboard) {
     }
 
     if (input.has_value())
-
         this->world.move_player(input.value());
+
+    // check if current world
 
     this->world.update();
 }

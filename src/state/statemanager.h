@@ -3,9 +3,9 @@
 #ifndef GAME_SRC_STATE_STATEMANAGER_H
 #define GAME_SRC_STATE_STATEMANAGER_H
 
-#include "../controllers/keyboard.h"
-#include "../utils/log.h"
+#include "controllers/keyboard.h"
 #include "state.h"
+#include "utils/log.h"
 
 #include <stdexcept>
 #include <unordered_map>

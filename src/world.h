@@ -4,6 +4,7 @@
 #define GAME_SRC_WORLD_H
 
 #include "controllers/keyboard.h"
+#include "controllers/resource_manager.h"
 #include "math/vec.h"
 #include "utils/types.h"
 
@@ -42,14 +43,20 @@ private:
     const f64 JUMP_FORCE{1.8f};
 
 public:
-    World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory> factory);
+    World(const level::LevelInfo& level_info, const std::shared_ptr<SubjectFactory>& factory);
     ~World() = default;
+
+    World(World&& world) = default;
+    World& operator=(World&& world);
 
     /// Updates the physics and goal-detection.
     void update();
 
     /// Tries to move player using input
     void move_player(const std::set<Input>& input);
+
+    /// Returns `{completed, failed}` object.
+    inline std::pair<bool, bool> completed_or_failed() const { return {this->finished, this->dead}; }
 
 private:
     /// Checks collision with all entities per axis and updates the internal state of the entity.
@@ -76,9 +83,6 @@ private:
 
     bool finished{false};
     bool dead{false};
-
-    /// contiains textures
-    std::shared_ptr<SubjectFactory> factory;
 };
 
 #endif // GAME_SRC_WORLD_H

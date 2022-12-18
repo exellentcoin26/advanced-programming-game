@@ -5,14 +5,14 @@
 
 #include <iostream>
 
-World::World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory> factory) : factory(factory) {
+World::World(const level::LevelInfo& level_info, const std::shared_ptr<SubjectFactory>& factory) {
     // construct `World` from `level_info`
 
     // create camera
     this->camera = std::make_shared<Camera>(level_info.camera_height, 0, level_info.camera_increment);
 
     // A player is about 0.75 percent of a tile
-    // calculate factor to restrict the world to be within [-1, 1] on width and [-1, h] on heigh
+    // calculate factor to restrict the world to be within [-1, 1] on width and [-1, h] on height
     // the level width is set to 2
     const f64 scale = 2.0 / level_info.size.get_x();
 
@@ -34,6 +34,18 @@ World::World(const level::LevelInfo& level_info, std::shared_ptr<SubjectFactory>
         this->subjects[this->subjects.size()] = std::unique_ptr<Tile>(
             factory->create_tile(this->camera, tile_pos * scale - Vec2(1.0, 1.0), Bounds({0, 0}, {scale, scale})));
     }
+}
+
+World& World::operator=(World&& world) {
+    this->subjects = std::move(world.subjects);
+    this->entities = std::move(world.entities);
+    this->player = world.player;
+    this->goal = world.goal;
+    this->dead = world.dead;
+    this->finished = world.finished;
+    this->camera = world.camera;
+
+    return *this;
 }
 
 void World::update() {
