@@ -27,18 +27,24 @@ Game::GameBuilder Game::create_game(WindowStyle style, u32 width, u32 height, co
 }
 
 Game::Game(WindowStyle style, u32 width, u32 height, const std::string& title, u32 fps, bool vsync)
-    : style(style), width(width), height(height), window(std::shared_ptr<Window>(this->create_window(width, height, title))),
-      fps(fps), vsync(vsync), factory(std::make_shared<SFMLSubjectFactory>(this->window)), state_manager([&]() -> StateManager {
+    : style(style), width(width), height(height),
+      window(std::shared_ptr<Window>(this->create_window(width, height, title))), fps(fps), vsync(vsync),
+      factory(std::make_shared<SFMLSubjectFactory>(this->window)),
+      state_manager(std::shared_ptr<StateManager>([&]() -> StateManager* {
           auto resource_manager = ResourceManager::get_instance();
           resource_manager->load_levels_from_dir("assets/levels");
 
-          return StateManager::create_state_manager(StateType::GameState)
-              .insert_state(StateType::GameState, new GameState(this->window, this->factory))
-              .insert_state(StateType::MenuState, new MenuState(this->window))
-              .insert_state(StateType::OptionsState, new OptionsState(this->window))
+          return StateManager::create_state_manager(StateManager::StateType::MenuState)
+              .insert_state(StateManager::StateType::MenuState, nullptr)
               .build();
-      }()),
-      keyboard(Keyboard()) {}
+      }())),
+      keyboard(Keyboard()) {
+    this->state_manager
+        ->insert_state(StateManager::StateType::GameState,
+                       new GameState(this->window, this->state_manager, this->factory))
+        .insert_state(StateManager::StateType::MenuState, new MenuState(this->window, this->state_manager))
+        .insert_state(StateManager::StateType::OptionsState, new OptionsState(this->window, this->state_manager));
+}
 
 sf::RenderWindow* Game::create_window(u32 width, u32 height, const std::string& title) const {
     auto style = sf::Style::None;
@@ -86,7 +92,7 @@ void Game::start() {
             ++frames;
             --delta;
 
-            // check for screen close
+            // check for screen close and resize
             sf::Event event;
             while (this->window->pollEvent(event)) {
                 if (event.type == sf::Event::Closed) {
@@ -96,20 +102,18 @@ void Game::start() {
                 if (event.type == sf::Event::Resized) {
                     sf::FloatRect view(0, 0, event.size.width, event.size.height);
                     window->setView(sf::View(view));
+                    this->width = event.size.width;
+                    this->height = event.size.height;
                 }
             }
 
             if (quit)
                 break;
 
-            // clear the screen
             this->window->clear();
 
-            // update keyboard listener state
             this->keyboard.update();
-
-            // stop watch, update state and reset watch
-            this->state_manager.update(&keyboard);
+            this->state_manager->update(&this->keyboard);
 
             this->window->display();
 

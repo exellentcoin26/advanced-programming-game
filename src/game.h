@@ -28,12 +28,7 @@ public:
     };
 
 private:
-    enum class StateType {
-        MenuState,
-        OptionsState,
-        GameState,
-        Default = MenuState,
-    };
+    using StateManager = state::StateManager;
 
 private:
     using Window = sf::RenderWindow;
@@ -44,7 +39,6 @@ private:
     using TimePoint = std::chrono::time_point<SystemClock>;
 
     using State = state::State;
-    using StateManager = state::StateManager<StateType>;
 
     using GameState = state::GameState;
     using MenuState = state::MenuState;
@@ -85,7 +79,7 @@ private:
 
 private:
     const WindowStyle style;
-    const u32 width, height;
+    u32 width, height;
     std::shared_ptr<Window> window;
 
     const u32 fps;
@@ -93,9 +87,8 @@ private:
 
     std::shared_ptr<SubjectFactory> factory;
 
-    StateManager state_manager;
+    std::shared_ptr<state::StateManager> state_manager{};
     Keyboard keyboard;
-
 };
 
 #endif // GAME_SRC_GAME_H
