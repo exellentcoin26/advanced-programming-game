@@ -5,7 +5,8 @@
 
 #include <iostream>
 
-World::World(const level::LevelInfo& level_info, const std::shared_ptr<SubjectFactory>& factory) {
+World::World(const level::LevelInfo& level_info, const std::shared_ptr<SubjectFactory>& factory, usize index)
+    : index(index) {
     // construct `World` from `level_info`
 
     // create camera
@@ -44,6 +45,7 @@ World& World::operator=(World&& world) {
     this->dead = world.dead;
     this->finished = world.finished;
     this->camera = world.camera;
+    this->index = world.index;
 
     return *this;
 }

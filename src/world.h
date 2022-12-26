@@ -43,7 +43,7 @@ private:
     const f64 JUMP_FORCE{1.8f};
 
 public:
-    World(const level::LevelInfo& level_info, const std::shared_ptr<SubjectFactory>& factory);
+    World(const level::LevelInfo& level_info, const std::shared_ptr<SubjectFactory>& factory, usize index = 0);
     ~World() = default;
 
     World(World&& world) = default;
@@ -57,6 +57,8 @@ public:
 
     /// Returns `{completed, failed}` object.
     inline std::pair<bool, bool> completed_or_failed() const { return {this->finished, this->dead}; }
+
+    inline usize get_index() const { return this->index; }
 
 private:
     /// Checks collision with all entities per axis and updates the internal state of the entity.
@@ -83,6 +85,8 @@ private:
 
     bool finished{false};
     bool dead{false};
+
+    usize index;
 };
 
 #endif // GAME_SRC_WORLD_H
