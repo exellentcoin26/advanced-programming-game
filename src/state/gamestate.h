@@ -20,11 +20,9 @@ private:
         LevelState,
     };
 
-private:
-    using StateManager = state::StateManager<GameStateStateType>;
-
 public:
-    GameState(std::shared_ptr<Window> window, std::shared_ptr<SubjectFactory> factory);
+    GameState(std::shared_ptr<Window> window, std::shared_ptr<StateManager> state_manager,
+              std::shared_ptr<SubjectFactory> factory);
     ~GameState() = default;
 
     void update(Keyboard* keyboard) override;

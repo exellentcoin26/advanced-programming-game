@@ -62,7 +62,7 @@ LDFLAGS += -lsfml-graphics-s
 LDFLAGS += -lsfml-window-s
 LDFLAGS += -lsfml-system-s
 # static dependencies of SFML
-LDFLAGS += -lGL -lX11 -ludev -lpthread -lXrandr
+LDFLAGS += -lGL -lX11 -ludev -lpthread -lXrandr -lfreetype
 
 # =========================
 # 	    Make Targets

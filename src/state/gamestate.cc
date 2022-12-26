@@ -8,8 +8,9 @@
 
 using namespace state;
 
-GameState::GameState(std::shared_ptr<Window> window, std::shared_ptr<SubjectFactory> factory)
-    : State(window), world([&]() -> World {
+GameState::GameState(std::shared_ptr<Window> window, std::shared_ptr<StateManager> state_manager,
+                     std::shared_ptr<SubjectFactory> factory)
+    : State(window, state_manager), world([&]() -> World {
           auto resource_manager = ResourceManager::get_instance();
           return World(resource_manager->get_current_level().first, factory);
       }()),
@@ -19,6 +20,11 @@ void GameState::update(Keyboard* keyboard) {
     // check that the world is completed or failed
     std::pair<bool, bool> completed_or_failed = this->world.completed_or_failed();
     auto resource_manager = ResourceManager::get_instance();
+    if (this->world.get_index() != resource_manager->get_current_level_index()) {
+        // initialize level
+        this->world = World(resource_manager->get_current_level().first, this->factory,
+                            resource_manager->get_current_level_index());
+    }
     if (completed_or_failed.first) {
         // mark level as completed
         resource_manager->get_current_level_mut().second = true;
@@ -30,7 +36,7 @@ void GameState::update(Keyboard* keyboard) {
             // find a level that has not been completed yet.
             const auto levels = resource_manager->get_levels();
             bool found{false};
-            for (unsigned int i = 0; i < levels.size(); ++i) {
+            for (u32 i = 0; i < levels.size(); ++i) {
                 if (levels.at(i).second)
                     continue;
 
@@ -48,7 +54,15 @@ void GameState::update(Keyboard* keyboard) {
         }
 
         // load world with found level
-        this->world = World(resource_manager->get_current_level().first, this->factory);
+        this->world = World(resource_manager->get_current_level().first, this->factory,
+                            resource_manager->get_current_level_index());
+    } else if (completed_or_failed.second) {
+        this->world = World(resource_manager->get_current_level().first, this->factory,
+                            resource_manager->get_current_level_index());
+    }
+
+    if (keyboard->is_key_pressed(Keyboard::Key::Escape)) {
+        this->state_manager->change_state(StateManager::StateType::MenuState);
     }
 
     std::optional<std::set<Input>> input{};
