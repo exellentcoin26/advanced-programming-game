@@ -150,9 +150,14 @@ void World::entity_check_collision_and_update_pos(usize e_idx, const Bounds& old
     Vec2 new_pos{new_bounds_x.get_position().get_x(), new_bounds_y.get_position().get_y()};
     Entity* e = static_cast<Entity*>(&*this->subjects.at(e_idx));
 
+    const Bounds new_bounds({new_bounds_x.get_position().get_x(), new_bounds_y.get_position().get_y()},
+                            old_bounds.get_size());
+
+    bool collides{false};
+
     for (const auto& [s_idx, s] : this->subjects) {
 
-        if (this->entities.find(s_idx) != this->entities.end() || s_idx == this->goal)
+        if (this->entities.find(s_idx) != this->entities.end() || s_idx == this->goal || s_idx == e_idx)
             // ignore other entities for collision
             continue;
 
@@ -163,6 +168,8 @@ void World::entity_check_collision_and_update_pos(usize e_idx, const Bounds& old
 
             // set volocity on x axis to zero
             e->get_mut_velocity().ny(0.0);
+
+            collides = true;
         }
 
         // check for y axis
@@ -172,11 +179,30 @@ void World::entity_check_collision_and_update_pos(usize e_idx, const Bounds& old
 
             // set velocity on y axis to zero
             e->get_mut_velocity().xn(0.0);
+
+            collides = true;
         }
 
         // early-return if there has been a collision at both axes
         if (new_pos == old_bounds.get_position())
             break;
+    }
+
+    if (!collides) {
+        // check again for all subjects on both axis
+        for (const auto& [s_idx, s] : this->subjects) {
+
+            if (this->entities.find(s_idx) != this->entities.end() || s_idx == this->goal || s_idx == e_idx)
+                // ignore other entities for collision
+                continue;
+
+            if (new_bounds.collides(s->get_abs_bounds())) {
+                e->get_mut_velocity() = {0, 0};
+
+                new_pos = old_bounds.get_position();
+                break;
+            }
+        }
     }
 
     e->set_position(new_pos);
