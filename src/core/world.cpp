@@ -178,7 +178,7 @@ void World::entity_check_collision_and_update_pos(usize e_idx, const Bounds& old
             new_pos.xn(old_bounds.get_position().get_y());
 
             // set velocity on y axis to zero
-            e->get_mut_velocity().xn(0.0);
+            e->get_mut_velocity().xn((e->get_velocity().get_y() > 0) ? -e->get_mut_velocity().get_y() / 3.0 : 0.0);
 
             collides = true;
         }
