@@ -18,12 +18,14 @@
 #include <memory>
 #include <set>
 
+/// Enum of input that can be sent to move the `Player`.
 enum class Input {
     Left,
     Right,
     Jump,
 };
 
+/// Main `World` class containing all subjects (eg. `Player`, `Wall`, `Goal`)
 class World {
 private:
     using Subject = subject::Subject;
@@ -41,6 +43,8 @@ private:
     const f64 JUMP_FORCE{1.8f};
 
 public:
+    /// Creates a new `World` instance from the `level_info` and uses `factory` to create `Subjects`.
+    /// Note: index is only used by the level manager.
     World(const level::LevelInfo& level_info, const std::shared_ptr<SubjectFactory>& factory, usize index = 0);
     ~World() = default;
 
@@ -50,12 +54,13 @@ public:
     /// Updates the physics and goal-detection.
     void update();
 
-    /// Tries to move player using input
+    /// Tries to move player using `input`.
     void move_player(const std::set<Input>& input);
 
     /// Returns `{completed, failed}` object.
     inline std::pair<bool, bool> completed_or_failed() const { return {this->finished, this->dead}; }
 
+    /// Returns the stored index of the leve
     inline usize get_index() const { return this->index; }
 
 private:

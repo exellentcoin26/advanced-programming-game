@@ -9,6 +9,7 @@ namespace subject {
 
 namespace entity {
 
+/// Struct containing info about whether the player can jump/wall-jump or not.
 struct CollideInfo {
     /// Collision at the top of the bound.
     bool up;
@@ -32,7 +33,9 @@ protected:
     const f64 DRAG_FORCE{9.0f};
 
 public:
+    /// Creates a new `Entity` instance.
     Entity() = default;
+    /// Creates a new `Entity` instance using the given position and bounds.
     inline Entity(const Vec2& pos, const Bounds& bounds) : Subject(pos, bounds) {}
     virtual ~Entity() = default;
 
@@ -48,8 +51,11 @@ public:
     /// Returns the new position if the forces and velocity would be applied.
     virtual Vec2 project() const;
 
+    /// Returns the velocity of the `Entity`.
     inline const Vec2& get_velocity() const { return this->velocity; }
+    /// Returns a mutable reference to the velocity of the `Entity`.
     inline Vec2& get_mut_velocity() { return this->velocity; }
+    /// Sets the velocity of the `Entity` to the given velocity.
     inline void set_velocity(const Vec2& vel) { this->velocity = vel; }
 
 protected:
@@ -62,14 +68,15 @@ private:
 };
 
 class Player : public Entity {
-private:
 public:
+    /// Creates a new `Player` instance.
     inline Player(const Vec2& pos, const Bounds& bounds) : Entity(pos, bounds) {}
     ~Player() = default;
 
     /// Checks if the player can jump after colliding with this object.
     void check_jump_collision(const std::vector<Bounds>& others);
 
+    /// Returns the players jump collider (`CollideInfo`).
     const CollideInfo& get_jump_collider() const { return this->jump_collider; }
 
 private:

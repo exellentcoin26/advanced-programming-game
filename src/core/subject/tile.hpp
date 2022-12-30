@@ -7,8 +7,10 @@
 
 namespace subject {
 
+/// Tile class representing a wall in the `World`
 class Tile : public Subject {
 public:
+    /// Creates a new `Tile` instance.
     inline Tile(const Vec2& pos, const Bounds& bounds) : Subject(pos, bounds) {}
     virtual ~Tile() = default;
 };

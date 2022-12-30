@@ -7,8 +7,10 @@
 
 namespace subject {
 
+/// Goal class representing the finish in the world.
 class Goal : public Subject {
 public:
+    /// Creates a new `Goal` instance.
     inline Goal(const Vec2& pos, const Bounds& bounds) : Subject(pos, bounds) {}
 };
 

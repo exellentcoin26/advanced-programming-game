@@ -12,6 +12,7 @@
 
 namespace level {
 
+/// Exception thrown when parsing a level file.
 class LevelLoaderException : public std::exception {
 public:
     inline LevelLoaderException(std::string message) : message(std::move(message)) {}
@@ -22,6 +23,7 @@ private:
     std::string message{};
 };
 
+/// Vector of exceptions thrown when parsing level file.
 class LevelLoaderExceptionVec : public std::exception, public std::vector<LevelLoaderException> {
 public:
     LevelLoaderExceptionVec() = default;
@@ -30,6 +32,7 @@ public:
     inline const char* what() const noexcept override { return "failed to parse level, see content for details"; }
 };
 
+/// `LevelInfo` struct containing all information of a parsed level file.
 struct LevelInfo {
 private:
     class LevelInfoBuilder {
@@ -103,20 +106,32 @@ private:
     };
 
 public:
+    /// Creates a new instance of the `LevelInfoBuilder` class.
     inline static LevelInfoBuilder create(std::string name, u32 camera_height, f64 camera_increment) {
         return {std::move(name), camera_height, camera_increment};
     }
 
 public:
+    /// Name of the level.
     const std::string name{};
+    /// Size of the level axes.
     const math::Vec2 size{};
+    /// Vector of tile coordinates in the level.
+    /// Note: Coordinates start from `{0, 0}` in the left-bottom corner.
     const std::vector<math::Vec2> tiles{};
+    /// Coordinates of the player.
+    /// Note: Coordinates start from `{0, 0}` in the left-bottom corner.
     const math::Vec2 player{};
+    /// Coordinates of the goal.
+    /// Note: Coordinates start from `{0, 0}` in the left-bottom corner.
     const math::Vec2 goal{};
+    /// Amount of tiles (height) seen by the camera.
     const f64 camera_height{};
+    /// Amount the camera offset increments with every second.
     const f64 camera_increment{};
 };
 
+/// Parsers a level file into a `LevelInfo` instance.
 LevelInfo load_level_from_file(std::string_view filepath);
 
 } // namespace level

@@ -22,6 +22,7 @@ protected:
     using Vec2 = math::Vec2;
 
 public:
+    /// Creates a new `SubjectFactory` instance.
     SubjectFactory() = default;
     virtual ~SubjectFactory() = default;
 

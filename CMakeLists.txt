@@ -7,7 +7,7 @@ project(MeatBoy)
 
 # set(CMAKE_CXX_COMPILER /usr/bin/clang++)      # not possible because of SFML
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+set(CMAKE_EXPORT_COMPILE_COMMANDS true)
 
 # ====================
 #      Libraries
@@ -27,9 +27,8 @@ add_subdirectory(src/core)
 
 add_executable(meat_boy)
 add_executable(meat_boy-test)
-
-set_target_properties(meat_boy PROPERTIES COMPILE_FLAGS "-Wall -Wextra -Wpedantic")
-set_target_properties(meat_boy-test PROPERTIES COMPILE_FLAGS "-Wall -Wextra -Wpedantic")
+set_target_properties(meat_boy PROPERTIES COMPILE_FLAGS "-std=c++17 -Wall -Wextra -Wpedantic")
+set_target_properties(meat_boy-test PROPERTIES COMPILE_FLAGS "-std=c++17 -Wall -Wextra -Wpedantic")
 
 # search all source files in top level
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp" "src/*.hpp")

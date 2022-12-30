@@ -26,8 +26,11 @@ private:
 /// Singleton logger/tracing class
 class Logger {
 public:
+    /// Enum class containing possible log levels.
+    /// Note: The value of the level defines the importance.
     enum class LogLevel { None = 0, Error = 1, Warn = 2, Info = 3, Debug = 4, Default = Debug };
 
+    /// Returns the singleton `Logger` instance.
     static std::shared_ptr<Logger> get_instance() {
         if (!instance) {
             instance = std::make_shared<Logger>();
@@ -36,11 +39,14 @@ public:
         return instance;
     }
 
+    /// Configures the `Logger` with the provided stream and level. All levels below (see `LogLevel` enum) the set
+    /// level, will be ignored.
     inline void config(LogLevel level, std::ostream& out) {
         this->level = level;
         this->out = &out;
     }
 
+    /// Note: Sould not be used by end user. Provided `LOG` macro should be used.
     inline std::unique_ptr<LogStream> log(const std::string& file, unsigned int line, const std::string& function,
                                           LogLevel level) const {
         const bool ignore = (level > this->level);

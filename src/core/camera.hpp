@@ -9,8 +9,10 @@
 
 #include <optional>
 
+/// Camera class representing what can be seen by the window.
 class Camera {
 public:
+    /// Creates a new `Camera` instance.
     inline Camera(f64 height, f64 offset, f64 increment = 0.0) : height(height), offset(offset), increment(increment) {}
     ~Camera() = default;
 
@@ -53,7 +55,9 @@ public:
         return pos + math::Vec2{1.0, 1.0} - math::Vec2{0.0, this->offset};
     }
 
+    /// Returns the view width of the `Camera`.
     inline f64 get_width() const { return this->width; }
+    /// Returns the view height of the `Camera`.
     inline f64 get_height() const { return this->height; }
 
 private:
