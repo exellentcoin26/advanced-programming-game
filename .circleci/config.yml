@@ -19,10 +19,10 @@ jobs:
       - run: git submodule sync
       - run: git submodule update --init --recursive
       - run:
-          command: make build
+          command: mkdir -p build && cmake -B build -S . && cmake --build ./build
           name: Build the project
       - run:
-          command: make test
+          command: ./build/meat_boy-test
           name: Test parts of the project
 
 workflows:

@@ -1,0 +1,34 @@
+name = "Welcome!"
+
+[camera]
+height = 25
+increment = 0
+
+[level]
+map = '''
+xxxxxxxxxxxxxxx
+x             x
+x             x
+x             x
+x             x
+x            gx
+x       xxxxxxx
+x             x
+x             x
+x             x
+xx            x
+x             x
+x             x
+x  xxxxxxxxxxxx
+x             x
+x             x
+xxxx          x
+x             x
+x             x
+x             x
+x      xxxxxxxx
+x             x
+x             x
+xp            x
+xxxxxxxxxxxxxxx
+'''

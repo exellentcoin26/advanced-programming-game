@@ -30,9 +30,9 @@
 
 - [ ] Logic library:
 
-  - [ ] Physics
-    - [ ] Player jump mechanics
-        - [ ] Extended bounding box collision detection
+  - [x] Physics
+    - [x] Player jump mechanics
+        - [x] Extended bounding box collision detection
   - [x] Math library
   - [x] Entity design
     - [x] Decide how to handle collision
@@ -48,5 +48,4 @@
     - [ ] MenuState
     - [ ] \(OptionsState\)
     - [x] GameState
-      - [ ] LevelSelector
-      - [x] Level
+

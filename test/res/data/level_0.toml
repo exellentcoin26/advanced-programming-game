@@ -1,3 +1,5 @@
+name = "test_0"
+
 [camera]
 height = 2
 increment = 0
