@@ -34,7 +34,13 @@ void ResourceManager::load_levels_from_dir(std::string_view dir) {
         try {
             this->levels.push_back({level::load_level_from_file(dir_entry.path().string()), false});
         } catch (const level::LevelLoaderExceptionVec& e) {
+            for (const auto& c : e) {
+                LOG(Error) << c.what() << '\n';
+            }
             exceptions.insert(exceptions.end(), e.begin(), e.end());
         }
     }
+
+    if (!exceptions.empty())
+        throw exceptions;
 }

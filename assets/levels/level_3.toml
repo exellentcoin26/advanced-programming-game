@@ -1,0 +1,96 @@
+name = "Jump!"
+
+[camera]
+height = 20
+increment = 0
+
+[level]
+map = '''
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x           g                   x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+x                               x
+xp                              x
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+'''
